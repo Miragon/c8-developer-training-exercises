@@ -9,7 +9,11 @@ kotlin_jackson = "2.20.1"
 mockito_version = "5.2.0"
 kotlin_mockito_version = "6.1.0"
 zeebe_version = "8.8.2"
+connectors_version = "8.8.2"
 postgres_version = "42.7.8"
+lombok_version = "1.18.36"
+assertj_version = "3.27.3"
+slf4j_version = "2.0.16"
 
 [libraries]
 web = { module = "org.springframework.boot:spring-boot-starter-web", version.ref = "spring_version" }
@@ -20,6 +24,19 @@ zeebeSdk = { module = "io.camunda:camunda-spring-boot-starter", version.ref = "z
 kotlin-reflect = { module = "org.jetbrains.kotlin:kotlin-reflect", version.ref = "kotlin_version" }
 kotlin_logging = { module = "io.github.microutils:kotlin-logging", version.ref = "kotlin_logging_version" }
 kotlin_jackson = { module = "com.fasterxml.jackson.module:jackson-module-kotlin", version.ref = "kotlin_jackson" }
+
+# connector SDK
+connectorCore = { module = "io.camunda.connector:connector-core", version.ref = "connectors_version" }
+connectorValidation = { module = "io.camunda.connector:connector-validation", version.ref = "connectors_version" }
+connectorTest = { module = "io.camunda.connector:connector-test", version.ref = "connectors_version" }
+connectorRuntime = { module = "io.camunda.connector:spring-boot-starter-camunda-connectors", version.ref = "connectors_version" }
+elementTemplateGenerator = { module = "io.camunda.connector:element-template-generator-core", version.ref = "connectors_version" }
+
+# common libraries
+lombok = { module = "org.projectlombok:lombok", version.ref = "lombok_version" }
+slf4jApi = { module = "org.slf4j:slf4j-api", version.ref = "slf4j_version" }
+slf4jJdk14 = { module = "org.slf4j:slf4j-jdk14", version.ref = "slf4j_version" }
+assertj = { module = "org.assertj:assertj-core", version.ref = "assertj_version" }
 
 # testing
 zeebeProcessTest = { module = "io.camunda:camunda-process-test-spring", version.ref = "zeebe_version" }
@@ -33,6 +50,7 @@ spring_mockk = { module = "com.ninja-squad:springmockk", version.ref = "spring_m
 defaultService = ["kotlin-reflect", "kotlin_logging", "devtools", "web", "zeebeSdk"]
 database = ["jpa", "postgres"]
 test = ["spring_test", "mockito", "mockk", "spring_mockk", "kotlin_mockito"]
+connectorCore = ["connectorCore", "connectorValidation"]
 
 [plugins]
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin_version" }
