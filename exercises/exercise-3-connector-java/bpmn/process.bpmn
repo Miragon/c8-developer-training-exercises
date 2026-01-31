@@ -13,7 +13,7 @@
       <bpmn:extensionElements>
         <zeebe:taskDefinition type="notifyCustomer" />
         <zeebe:ioMapping>
-          <zeebe:input source="=&#34;mail&#34;" target="notificationMethod" />
+          <zeebe:input source="EMAIL" target="notificationMethod" />
           <zeebe:input source="=&#34;About your purchase&#34;" target="mailTopic" />
           <zeebe:input source="=&#34;Apparently it is delayed&#34;" target="message" />
           <zeebe:input source="=&#34;Marco&#34;" target="customerName" />

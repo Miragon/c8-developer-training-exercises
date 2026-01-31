@@ -18,9 +18,13 @@
       }
     },
     {
-      "value": "=",
       "label": "Notification Method",
-      "type": "String",
+      "description": "Select how to notify the customer",
+      "type": "Dropdown",
+      "choices": [
+        { "name": "Email", "value": "EMAIL" },
+        { "name": "SMS", "value": "SMS" }
+      ],
       "binding": {
         "type": "zeebe:input",
         "name": "notificationMethod"
