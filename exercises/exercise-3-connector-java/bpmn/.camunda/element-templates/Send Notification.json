@@ -1,0 +1,66 @@
+{
+  "$schema": "https://unpkg.com/@camunda/zeebe-element-templates-json-schema/resources/schema.json",
+  "name": "Send Notification",
+  "id": "f571d294-1246-452c-922b-e12cf5046bf4",
+  "version": 1,
+  "appliesTo": [
+    "bpmn:ServiceTask"
+  ],
+  "groups": [
+    {
+      "id": "input",
+      "label": "Input"
+    },
+    {
+      "id": "output",
+      "label": "Output"
+    }
+  ],
+  "properties": [
+    {
+      "value": "sendNotification",
+      "label": "Connector Type",
+      "type": "String",
+      "editable": false,
+      "binding": {
+        "type": "zeebe:taskDefinition:type"
+      }
+    },
+    {
+      "value": "=",
+      "label": "Customer Number",
+      "description": "The unique customer identifier to look up preferences",
+      "type": "String",
+      "group": "input",
+      "binding": {
+        "type": "zeebe:input",
+        "name": "customerNo"
+      }
+    },
+    {
+      "value": "=",
+      "label": "Message",
+      "description": "The notification message to send",
+      "type": "String",
+      "group": "input",
+      "binding": {
+        "type": "zeebe:input",
+        "name": "message"
+      }
+    },
+    {
+      "label": "Result Variable",
+      "description": "Name of variable to store the notification result",
+      "type": "String",
+      "value": "notificationResult",
+      "group": "output",
+      "binding": {
+        "type": "zeebe:taskHeader",
+        "key": "resultVariable"
+      }
+    }
+  ],
+  "icon": {
+    "contents": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiPjxwYXRoIGQ9Ik0yMiAxNy4wMDFhMiAyIDAgMCAxLTIgMkg0YTIgMiAwIDAgMS0yLTJWOS41QzIgOCA0IDYgNiA2aDEyYzIgMCA0IDIgNCAzLjV2Ny41MDF6Ii8+PHBhdGggZD0iTTYgOGw2IDUgNi01Ii8+PC9zdmc+"
+  }
+}

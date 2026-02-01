@@ -12,6 +12,10 @@ Hands-on exercises for our Zeebe training program.
    - Master distributed transaction patterns
    - Path: `exercises/exercise-2-outbox-{kotlin|java}`
 
+3. **Exercise 3: Outbound Connector** (Java)
+   - Build a custom Camunda 8 outbound connector
+   - Path: `exercises/exercise-3-connector-java`
+
 ## 🚀 Quick Start
 
 1. Start infrastructure: `cd stack && docker-compose up -d`

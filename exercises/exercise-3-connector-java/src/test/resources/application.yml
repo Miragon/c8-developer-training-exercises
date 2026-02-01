@@ -1,0 +1,18 @@
+# https://docs.camunda.io/docs/apis-tools/spring-zeebe-sdk/getting-started/
+# https://docs.camunda.io/docs/apis-tools/spring-zeebe-sdk/configuration/
+
+camunda:
+  client:
+    mode: self-managed
+    prefer-rest-over-grpc: false
+    grpc-address: http://localhost:26500
+    enabled: true
+    auth:
+      method: none
+  connector:
+    secretprovider:
+      environment:
+        prefix: CONNECTOR_SECRET_
+
+server:
+  port: 8085
