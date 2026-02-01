@@ -1,0 +1,12 @@
+{
+  "components": [],
+  "type": "default",
+  "id": "Form_HumanOpinion",
+  "executionPlatform": "Camunda Cloud",
+  "executionPlatformVersion": "8.8.0",
+  "exporter": {
+    "name": "Camunda Modeler",
+    "version": "5.43.1"
+  },
+  "schemaVersion": 19
+}
