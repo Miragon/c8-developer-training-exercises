@@ -1,0 +1,270 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:zeebe="http://camunda.org/schema/zeebe/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:bioc="http://bpmn.io/schema/bpmn/biocolor/1.0" xmlns:color="http://www.omg.org/spec/BPMN/non-normative/color/1.0" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_1cn3qg5" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.43.1" modeler:executionPlatform="Camunda Cloud" modeler:executionPlatformVersion="8.8.0">
+  <bpmn:collaboration id="Collaboration_1l97jvw">
+    <bpmn:participant id="Participant_customerSupport" name="Miravelo Customer Support Process" processRef="Process_CustomerSupport" />
+  </bpmn:collaboration>
+  <bpmn:process id="Process_CustomerSupport" name="Miravelo Customer Support Process" isExecutable="true">
+    <bpmn:startEvent id="StartEvent_1" name="Support Request received">
+      <bpmn:extensionElements>
+        <zeebe:ioMapping>
+          <zeebe:output source="=customerNo" target="customerNo" />
+          <zeebe:output source="=orderId" target="orderId" />
+          <zeebe:output source="=customerMessage" target="customerMessage" />
+        </zeebe:ioMapping>
+      </bpmn:extensionElements>
+      <bpmn:outgoing>Flow_14cpm2d</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:businessRuleTask id="Activity_12uelcr" name="Decide on Tool to use">
+      <bpmn:extensionElements>
+        <zeebe:ioMapping>
+          <zeebe:input source="=customerMessage" target="customerMessage" />
+          <zeebe:output source="=toolChoice" target="toolChoice" />
+        </zeebe:ioMapping>
+        <zeebe:calledDecision decisionId="Decision_toolUse" resultVariable="toolChoice" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_14cpm2d</bpmn:incoming>
+      <bpmn:outgoing>Flow_0xdzvua</bpmn:outgoing>
+    </bpmn:businessRuleTask>
+    <bpmn:userTask id="Activity_0g07tpr" name="Handle support case old-fashioned">
+      <bpmn:extensionElements>
+        <zeebe:userTask />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_07a8l1d</bpmn:incoming>
+      <bpmn:outgoing>Flow_0hz5id8</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:endEvent id="Event_0gy812z" name="Support Case handled by human">
+      <bpmn:incoming>Flow_0hz5id8</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:scriptTask id="Activity_1v1cyre" name="Prepare Todo&#39;s">
+      <bpmn:extensionElements>
+        <zeebe:script expression="=split(toolChoice, &#34;,&#34;)" resultVariable="toolList" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_0xdzvua</bpmn:incoming>
+      <bpmn:outgoing>Flow_1txns7k</bpmn:outgoing>
+    </bpmn:scriptTask>
+    <bpmn:endEvent id="Event_15nao8x" name="Support Case handeled">
+      <bpmn:incoming>Flow_0acrdq1</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:adHocSubProcess id="Activity_1ws6a1f">
+      <bpmn:extensionElements>
+        <zeebe:adHoc activeElementsCollection="=toolList" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_1txns7k</bpmn:incoming>
+      <bpmn:outgoing>Flow_0acrdq1</bpmn:outgoing>
+      <bpmn:scriptTask id="Tool_1" name="Get Order Status">
+        <bpmn:extensionElements>
+          <zeebe:script expression="=[&#34;shipped&#34;, &#34;order received&#34;, &#34;being built&#34;][floor(random number() * 3) + 1]" resultVariable="orderStatus" />
+        </bpmn:extensionElements>
+      </bpmn:scriptTask>
+      <bpmn:scriptTask id="Tool_2" name="Check Inventory for Replacement">
+        <bpmn:extensionElements>
+          <zeebe:script expression="=random number() &#60; 0.5" resultVariable="replacementAvailable" />
+        </bpmn:extensionElements>
+      </bpmn:scriptTask>
+      <bpmn:scriptTask id="Tool_3" name="Check if eligible for Warranty">
+        <bpmn:extensionElements>
+          <zeebe:script expression="=random number() &#60; 0.5" resultVariable="isEligableforWarranty" />
+        </bpmn:extensionElements>
+      </bpmn:scriptTask>
+      <bpmn:serviceTask id="Tool_4" name="Draft customer reply" zeebe:modelerTemplate="io.miragon.agentic.generateText" zeebe:modelerTemplateVersion="1" zeebe:modelerTemplateIcon="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiM2MzY2ZjEiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48cGF0aCBkPSJNMTIgMmE4IDggMCAwIDAgMCAxNiA4LjUtOC41IDAgMCAxIDAtMTUuOTkiLz48cGF0aCBkPSJNMTIgMnY0Ii8+PHBhdGggZD0iTTEyIDE4djQiLz48cGF0aCBkPSJNNC45MyA0LjkzbDIuODMgMi44MyIvPjxwYXRoIGQ9Ik0xNi4yNCAxNi4yNGwyLjgzIDIuODMiLz48cGF0aCBkPSJNMiAxMmg0Ii8+PHBhdGggZD0iTTE4IDEyaDQiLz48cGF0aCBkPSJNNC45MyAxOS4wN2wyLjgzLTIuODMiLz48cGF0aCBkPSJNMTYuMjQgNy43NmwyLjgzLTIuODMiLz48L3N2Zz4=">
+        <bpmn:extensionElements>
+          <zeebe:taskDefinition type="generateText" />
+          <zeebe:ioMapping>
+            <zeebe:input source="We received a support request from one of our customers. We are Miravelo a bike Company, selling high quality products. We want to be the best in service quality as well." target="systemMessage" />
+            <zeebe:input source="={&#10;  safe: function(x) if x = null then &#34;&#34; else string(x),&#10;  txt:&#10;    &#34;Our customer &#34; + safe(customerNo)&#10;    + (if customerNo = null then &#34;&#34; else &#34; &#34;)&#10;    + (if orderId = null then &#34;&#34; else &#34;with his orderId &#34; + safe(orderId) + &#34; &#34;)&#10;    + &#34;contacted us with the following message: &#34; + safe(customerMessage)&#10;    + &#34;. We want to help him. We may need additional details now:&#34;&#10;    + (if orderStatus = null then &#34;&#34; else &#34; Order Status: &#34; + safe(orderStatus) + &#34;.&#34;)&#10;    + (if replacementAvailable = null then &#34;&#34; else &#34; Replacement available: &#34; + safe(replacementAvailable) + &#34;.&#34;)&#10;    + (if isEligableforWarranty = null then &#34;&#34; else &#34; Eligible for warranty: &#34; + safe(isEligableforWarranty) + &#34;.&#34;)&#10;    + (if ticketCreated = null then &#34;&#34; else &#34; Warehouse Ticket created: &#34; + safe(ticketCreated) + &#34;.&#34;)&#10;    + (if humanOpinion = null then &#34;&#34; else &#34; Human Opinion: &#34; + safe(humanOpinion) + &#34;.&#34;)&#10;    + &#34; Draft him an email.&#34;&#10;  + (if reply = null then &#34;&#34; else &#34; Customer Reply: &#34; + safe(reply) + &#34;.&#34;)&#10;}.txt" target="prompt" />
+            <zeebe:output source="=response" target="email" />
+          </zeebe:ioMapping>
+        </bpmn:extensionElements>
+        <bpmn:outgoing>Flow_1hpaehh</bpmn:outgoing>
+      </bpmn:serviceTask>
+      <bpmn:sequenceFlow id="Flow_0jqub2p" sourceRef="Tool_5" targetRef="Activity_1w2rclz" />
+      <bpmn:serviceTask id="Tool_5" name="Generate proposed actions" zeebe:modelerTemplate="io.miragon.agentic.generateText" zeebe:modelerTemplateVersion="1" zeebe:modelerTemplateIcon="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiM2MzY2ZjEiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48cGF0aCBkPSJNMTIgMmE4IDggMCAwIDAgMCAxNiA4LjUtOC41IDAgMCAxIDAtMTUuOTkiLz48cGF0aCBkPSJNMTIgMnY0Ii8+PHBhdGggZD0iTTEyIDE4djQiLz48cGF0aCBkPSJNNC45MyA0LjkzbDIuODMgMi44MyIvPjxwYXRoIGQ9Ik0xNi4yNCAxNi4yNGwyLjgzIDIuODMiLz48cGF0aCBkPSJNMiAxMmg0Ii8+PHBhdGggZD0iTTE4IDEyaDQiLz48cGF0aCBkPSJNNC45MyAxOS4wN2wyLjgzLTIuODMiLz48cGF0aCBkPSJNMTYuMjQgNy43NmwyLjgzLTIuODMiLz48L3N2Zz4=">
+        <bpmn:extensionElements>
+          <zeebe:taskDefinition type="generateText" />
+          <zeebe:ioMapping>
+            <zeebe:input source="We received a support request from one of our customers. We are Miravelo a bike Company, selling high quality products. We want to be the best in service quality as well." target="systemMessage" />
+            <zeebe:input source="={&#10;  safe: function(x) if x = null then &#34;&#34; else string(x),&#10;  txt:&#10;    &#34;Our customer &#34; + safe(customerNo)&#10;    + (if customerNo = null then &#34;&#34; else &#34; &#34;)&#10;    + (if orderId = null then &#34;&#34; else &#34;with his orderId &#34; + safe(orderId) + &#34; &#34;)&#10;    + &#34;contacted us with the following message: &#34; + safe(customerMessage)&#10;    + &#34;. We want to help him. We may need additional details now:&#34;&#10;    + (if orderStatus = null then &#34;&#34; else &#34; Order Status: &#34; + safe(orderStatus) + &#34;.&#34;)&#10;    + (if replacementAvailable = null then &#34;&#34; else &#34; Replacement available: &#34; + safe(replacementAvailable) + &#34;.&#34;)&#10;    + (if isEligableforWarranty = null then &#34;&#34; else &#34; Eligible for warranty: &#34; + safe(isEligableforWarranty) + &#34;.&#34;)&#10;    + (if ticketCreated = null then &#34;&#34; else &#34; Warehouse Ticket created: &#34; + safe(ticketCreated) + &#34;.&#34;)&#10;    + (if humanOpinion = null then &#34;&#34; else &#34; Human Opinion: &#34; + safe(humanOpinion) + &#34;.&#34;)&#10;  + (if reply = null then &#34;&#34; else &#34; Customer Reply: &#34; + safe(reply) + &#34;.&#34;)&#10;    + &#34; What do you want to propose to get a human opinion on?&#34;&#10;}.txt" target="prompt" />
+            <zeebe:output source="=response" target="proposedActions" />
+          </zeebe:ioMapping>
+        </bpmn:extensionElements>
+        <bpmn:outgoing>Flow_0jqub2p</bpmn:outgoing>
+      </bpmn:serviceTask>
+      <bpmn:userTask id="Activity_1w2rclz" name="Ask human">
+        <bpmn:extensionElements>
+          <zeebe:userTask />
+          <zeebe:formDefinition formId="Form_HumanOpinion" />
+          <zeebe:ioMapping>
+            <zeebe:input source="=proposedActions" target="proposedActions" />
+            <zeebe:output source="=humanOpinion" target="humanOpinion" />
+          </zeebe:ioMapping>
+        </bpmn:extensionElements>
+        <bpmn:incoming>Flow_0jqub2p</bpmn:incoming>
+      </bpmn:userTask>
+      <bpmn:scriptTask id="Tool_6" name="Create ticket for warehouse">
+        <bpmn:extensionElements>
+          <zeebe:script expression="=true" resultVariable="ticketCreated" />
+        </bpmn:extensionElements>
+      </bpmn:scriptTask>
+      <bpmn:sequenceFlow id="Flow_1hpaehh" sourceRef="Tool_4" targetRef="Activity_1x0d4ee" />
+      <bpmn:serviceTask id="Activity_1x0d4ee" name="Send reply to customer" zeebe:modelerTemplate="f571d294-1246-452c-922b-e12cf5046bf4" zeebe:modelerTemplateVersion="1" zeebe:modelerTemplateIcon="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiPjxwYXRoIGQ9Ik0yMiAxNy4wMDFhMiAyIDAgMCAxLTIgMkg0YTIgMiAwIDAgMS0yLTJWOS41QzIgOCA0IDYgNiA2aDEyYzIgMCA0IDIgNCAzLjV2Ny41MDF6Ii8+PHBhdGggZD0iTTYgOGw2IDUgNi01Ii8+PC9zdmc+">
+        <bpmn:extensionElements>
+          <zeebe:taskDefinition type="sendNotification" />
+          <zeebe:ioMapping>
+            <zeebe:input source="=customerNo" target="customerNo" />
+            <zeebe:input source="=email" target="message" />
+          </zeebe:ioMapping>
+          <zeebe:taskHeaders>
+            <zeebe:header key="resultVariable" value="notificationResult" />
+          </zeebe:taskHeaders>
+        </bpmn:extensionElements>
+        <bpmn:incoming>Flow_1hpaehh</bpmn:incoming>
+        <bpmn:outgoing>Flow_0b0agqw</bpmn:outgoing>
+      </bpmn:serviceTask>
+      <bpmn:sequenceFlow id="Flow_0b0agqw" sourceRef="Activity_1x0d4ee" targetRef="Event_14m3ba1" />
+      <bpmn:intermediateCatchEvent id="Event_14m3ba1" name="Customer Reply received">
+        <bpmn:extensionElements>
+          <zeebe:ioMapping>
+            <zeebe:output source="=&#34;Dear Miravelo Customer Service Team, thank you for your quick response and for confirming that a replacement tire is available and covered under warranty. &#10;1. As far as I can tell, there are no other damages besides the flat tire. &#10;2. Please ship the replacement tire directly to me. Let me know if you need my delivery address again or any additional details. Thanks again for your help. Best regards, Thomas&#34;" target="reply" />
+          </zeebe:ioMapping>
+        </bpmn:extensionElements>
+        <bpmn:incoming>Flow_0b0agqw</bpmn:incoming>
+        <bpmn:messageEventDefinition id="MessageEventDefinition_1rh9u1k" messageRef="Message_1a7ju0h" />
+      </bpmn:intermediateCatchEvent>
+    </bpmn:adHocSubProcess>
+    <bpmn:boundaryEvent id="Event_0g6qce7" name="20 Minutes" attachedToRef="Activity_1ws6a1f">
+      <bpmn:outgoing>Flow_07a8l1d</bpmn:outgoing>
+      <bpmn:timerEventDefinition id="TimerEventDefinition_124pvtc">
+        <bpmn:timeDuration xsi:type="bpmn:tFormalExpression">PT20M</bpmn:timeDuration>
+      </bpmn:timerEventDefinition>
+    </bpmn:boundaryEvent>
+    <bpmn:sequenceFlow id="Flow_14cpm2d" sourceRef="StartEvent_1" targetRef="Activity_12uelcr" />
+    <bpmn:sequenceFlow id="Flow_0xdzvua" sourceRef="Activity_12uelcr" targetRef="Activity_1v1cyre" />
+    <bpmn:sequenceFlow id="Flow_07a8l1d" sourceRef="Event_0g6qce7" targetRef="Activity_0g07tpr" />
+    <bpmn:sequenceFlow id="Flow_0hz5id8" sourceRef="Activity_0g07tpr" targetRef="Event_0gy812z" />
+    <bpmn:sequenceFlow id="Flow_1txns7k" sourceRef="Activity_1v1cyre" targetRef="Activity_1ws6a1f" />
+    <bpmn:sequenceFlow id="Flow_0acrdq1" sourceRef="Activity_1ws6a1f" targetRef="Event_15nao8x" />
+  </bpmn:process>
+  <bpmn:message id="Message_1a7ju0h" name="customerUpdate">
+    <bpmn:extensionElements>
+      <zeebe:subscription correlationKey="=customerNo" />
+    </bpmn:extensionElements>
+  </bpmn:message>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Collaboration_1l97jvw">
+      <bpmndi:BPMNShape id="Participant_0dt7tvu_di" bpmnElement="Participant_customerSupport" isHorizontal="true">
+        <dc:Bounds x="170" y="80" width="1120" height="530" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="StartEvent_1_di" bpmnElement="StartEvent_1">
+        <dc:Bounds x="232" y="202" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="209" y="245" width="83" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0yifin1_di" bpmnElement="Activity_12uelcr" bioc:stroke="#0d4372" bioc:fill="#bbdefb" color:background-color="#bbdefb" color:border-color="#0d4372">
+        <dc:Bounds x="320" y="180" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1skr8tf_di" bpmnElement="Activity_0g07tpr">
+        <dc:Bounds x="770" y="470" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0gy812z_di" bpmnElement="Event_0gy812z">
+        <dc:Bounds x="922" y="492" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="906" y="535" width="68" height="40" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_03c63ne" bpmnElement="Activity_1v1cyre">
+        <dc:Bounds x="460" y="180" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_15nao8x_di" bpmnElement="Event_15nao8x">
+        <dc:Bounds x="1222" y="202" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1206" y="245" width="68" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1cl8oyt_di" bpmnElement="Activity_1ws6a1f" isExpanded="true">
+        <dc:Bounds x="620" y="120" width="540" height="310" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0zz4zg5_di" bpmnElement="Tool_1">
+        <dc:Bounds x="650" y="140" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_0sx4ndy" bpmnElement="Tool_2">
+        <dc:Bounds x="650" y="230" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_1w6k47r" bpmnElement="Tool_3">
+        <dc:Bounds x="650" y="320" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0g7c4m3_di" bpmnElement="Tool_4" bioc:stroke="#0d4372" bioc:fill="#bbdefb" color:background-color="#bbdefb" color:border-color="#0d4372">
+        <dc:Bounds x="790" y="230" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1m43naq_di" bpmnElement="Tool_5" bioc:stroke="#0d4372" bioc:fill="#bbdefb" color:background-color="#bbdefb" color:border-color="#0d4372">
+        <dc:Bounds x="790" y="320" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0gdlnh9_di" bpmnElement="Activity_1w2rclz">
+        <dc:Bounds x="940" y="320" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_0vn0zhm" bpmnElement="Tool_6">
+        <dc:Bounds x="790" y="140" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0sr3i3r_di" bpmnElement="Activity_1x0d4ee">
+        <dc:Bounds x="940" y="230" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_1eqcckj_di" bpmnElement="Event_14m3ba1">
+        <dc:Bounds x="1092" y="252" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1071" y="295" width="79" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_1hpaehh_di" bpmnElement="Flow_1hpaehh">
+        <di:waypoint x="890" y="270" />
+        <di:waypoint x="940" y="270" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0jqub2p_di" bpmnElement="Flow_0jqub2p">
+        <di:waypoint x="890" y="360" />
+        <di:waypoint x="940" y="360" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0b0agqw_di" bpmnElement="Flow_0b0agqw">
+        <di:waypoint x="1040" y="270" />
+        <di:waypoint x="1092" y="270" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="Event_0ddzt07_di" bpmnElement="Event_0g6qce7">
+        <dc:Bounds x="682" y="412" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="723" y="443" width="54" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_14cpm2d_di" bpmnElement="Flow_14cpm2d">
+        <di:waypoint x="268" y="220" />
+        <di:waypoint x="320" y="220" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0xdzvua_di" bpmnElement="Flow_0xdzvua">
+        <di:waypoint x="420" y="220" />
+        <di:waypoint x="460" y="220" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_07a8l1d_di" bpmnElement="Flow_07a8l1d">
+        <di:waypoint x="700" y="448" />
+        <di:waypoint x="700" y="510" />
+        <di:waypoint x="770" y="510" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0hz5id8_di" bpmnElement="Flow_0hz5id8">
+        <di:waypoint x="870" y="510" />
+        <di:waypoint x="922" y="510" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1txns7k_di" bpmnElement="Flow_1txns7k">
+        <di:waypoint x="560" y="220" />
+        <di:waypoint x="620" y="220" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0acrdq1_di" bpmnElement="Flow_0acrdq1">
+        <di:waypoint x="1160" y="220" />
+        <di:waypoint x="1222" y="220" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>

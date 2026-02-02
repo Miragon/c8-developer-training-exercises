@@ -1,0 +1,9 @@
+### Send Customer Reply
+POST http://localhost:8082/customer-reply
+Content-Type: application/json
+
+{
+  "customerNo": "thomasH",
+  "orderId": "1234",
+  "reply": "all resolved on my end. I do not need support anymore"
+}

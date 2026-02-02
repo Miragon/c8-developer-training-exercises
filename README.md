@@ -16,6 +16,10 @@ Hands-on exercises for our Zeebe training program.
    - Build a custom Camunda 8 outbound connector
    - Path: `exercises/exercise-3-connector-java`
 
+4. **Exercise 4: Agentic Orchestration**
+   - AI-powered decision making with process orchestration
+   - Path: `exercises/exercise-4-agentic-orchestration`
+
 ## 🚀 Quick Start
 
 1. Start infrastructure: `cd stack && docker-compose up -d`
