@@ -88,6 +88,7 @@
           <zeebe:ioMapping>
             <zeebe:input source="bearer" target="authentication.type" />
             <zeebe:input target="authentication.token" />
+            <zeebe:input source="org-LLLwzl6Bwy2GPdCovJn3yweT" target="internal_organization" />
             <zeebe:input source="=if is defined(internal_organization) and internal_organization != null then {&#34;Content-Type&#34;:&#34;application/json&#34;, &#34;OpenAI-Organization&#34;:internal_organization} else {&#34;Content-Type&#34;:&#34;application/json&#34;}" target="headers" />
             <zeebe:input source="chat" target="operation" />
             <zeebe:input source="post" target="method" />
@@ -95,7 +96,7 @@
             <zeebe:input source="gpt-4o" target="internal_model" />
             <zeebe:input source="1" target="internal_temperature" />
             <zeebe:input source="We received a support request from one of our customers. We are Miravelo a bike Company, selling high quality products. We want to be the best in service quality as well." target="internal_systemMessage" />
-            <zeebe:input source="={&#10;  safe: function(x) if x = null then &#34;&#34; else string(x),&#10;  txt:&#10;    &#34;Our customer &#34; + safe(customerNo)&#10;    + (if customerNo = null then &#34;&#34; else &#34; &#34;)&#10;    + (if orderId = null then &#34;&#34; else &#34;with his orderId &#34; + safe(orderId) + &#34; &#34;)&#10;    + &#34;contacted us with the following message: &#34; + safe(customerMessage)&#10;    + &#34;. We want to help him. We may need additional details now:&#34;&#10;    + (if orderStatus = null then &#34;&#34; else &#34; Order Status: &#34; + safe(orderStatus) + &#34;.&#34;)&#10;    + (if replacementAvailable = null then &#34;&#34; else &#34; Replacement available: &#34; + safe(replacementAvailable) + &#34;.&#34;)&#10;    + (if isEligableforWarranty = null then &#34;&#34; else &#34; Eligible for warranty: &#34; + safe(isEligableforWarranty) + &#34;.&#34;)&#10;    + (if ticketCreated = null then &#34;&#34; else &#34; Warehouse Ticket created: &#34; + safe(ticketCreated) + &#34;.&#34;)&#10;    + (if humanOpinion = null then &#34;&#34; else &#34; Human Opinion: &#34; + safe(humanOpinion) + &#34;.&#34;)&#10;    + &#34; Draft him an email.&#34;&#10;}.txt" target="internal_prompt" />
+            <zeebe:input source="={&#10;  safe: function(x) if x = null then &#34;&#34; else string(x),&#10;  txt:&#10;    &#34;Our customer &#34; + safe(customerNo)&#10;    + (if customerNo = null then &#34;&#34; else &#34; &#34;)&#10;    + (if orderId = null then &#34;&#34; else &#34;with his orderId &#34; + safe(orderId) + &#34; &#34;)&#10;    + &#34;contacted us with the following message: &#34; + safe(customerMessage)&#10;    + &#34;. We want to help him. We may need additional details now:&#34;&#10;    + (if orderStatus = null then &#34;&#34; else &#34; Order Status: &#34; + safe(orderStatus) + &#34;.&#34;)&#10;    + (if replacementAvailable = null then &#34;&#34; else &#34; Replacement available: &#34; + safe(replacementAvailable) + &#34;.&#34;)&#10;    + (if isEligableforWarranty = null then &#34;&#34; else &#34; Eligible for warranty: &#34; + safe(isEligableforWarranty) + &#34;.&#34;)&#10;    + (if ticketCreated = null then &#34;&#34; else &#34; Warehouse Ticket created: &#34; + safe(ticketCreated) + &#34;.&#34;)&#10;    + (if humanOpinion = null then &#34;&#34; else &#34; Human Opinion: &#34; + safe(humanOpinion) + &#34;.&#34;)&#10;    + &#34; Draft him an email.&#34;&#10;  + (if reply = null then &#34;&#34; else &#34; Customer Reply: &#34; + safe(reply) + &#34;.&#34;)&#10;}.txt" target="internal_prompt" />
             <zeebe:input source="1" target="internal_choices" />
             <zeebe:input source="=append(concatenate(if is defined(internal_systemMessage) then [{&#34;role&#34;: &#34;system&#34;, &#34;content&#34;: internal_systemMessage}] else [], if is defined(internal_chatHistory) then internal_chatHistory else []), {&#34;role&#34;: &#34;user&#34;, &#34;content&#34;: internal_prompt})" target="internal_messages" />
             <zeebe:input source="={&#34;model&#34;: if is defined(internal_custom_model) then internal_custom_model else internal_model, &#34;messages&#34;: internal_messages, &#34;n&#34;: number(internal_choices), &#34;temperature&#34;: number(internal_temperature)}" target="body" />
@@ -124,7 +125,7 @@
             <zeebe:input source="gpt-4o" target="internal_model" />
             <zeebe:input source="1" target="internal_temperature" />
             <zeebe:input source="We received a support request from one of our customers. We are Miravelo a bike Company, selling high quality products. We want to be the best in service quality as well." target="internal_systemMessage" />
-            <zeebe:input source="={&#10;  safe: function(x) if x = null then &#34;&#34; else string(x),&#10;  txt:&#10;    &#34;Our customer &#34; + safe(customerNo)&#10;    + (if customerNo = null then &#34;&#34; else &#34; &#34;)&#10;    + (if orderId = null then &#34;&#34; else &#34;with his orderId &#34; + safe(orderId) + &#34; &#34;)&#10;    + &#34;contacted us with the following message: &#34; + safe(customerMessage)&#10;    + &#34;. We want to help him. We may need additional details now:&#34;&#10;    + (if orderStatus = null then &#34;&#34; else &#34; Order Status: &#34; + safe(orderStatus) + &#34;.&#34;)&#10;    + (if replacementAvailable = null then &#34;&#34; else &#34; Replacement available: &#34; + safe(replacementAvailable) + &#34;.&#34;)&#10;    + (if isEligableforWarranty = null then &#34;&#34; else &#34; Eligible for warranty: &#34; + safe(isEligableforWarranty) + &#34;.&#34;)&#10;    + (if ticketCreated = null then &#34;&#34; else &#34; Warehouse Ticket created: &#34; + safe(ticketCreated) + &#34;.&#34;)&#10;    + (if humanOpinion = null then &#34;&#34; else &#34; Human Opinion: &#34; + safe(humanOpinion) + &#34;.&#34;)&#10;    + &#34; What do you want to propose to get a human opinion on?&#34;&#10;}.txt" target="internal_prompt" />
+            <zeebe:input source="={&#10;  safe: function(x) if x = null then &#34;&#34; else string(x),&#10;  txt:&#10;    &#34;Our customer &#34; + safe(customerNo)&#10;    + (if customerNo = null then &#34;&#34; else &#34; &#34;)&#10;    + (if orderId = null then &#34;&#34; else &#34;with his orderId &#34; + safe(orderId) + &#34; &#34;)&#10;    + &#34;contacted us with the following message: &#34; + safe(customerMessage)&#10;    + &#34;. We want to help him. We may need additional details now:&#34;&#10;    + (if orderStatus = null then &#34;&#34; else &#34; Order Status: &#34; + safe(orderStatus) + &#34;.&#34;)&#10;    + (if replacementAvailable = null then &#34;&#34; else &#34; Replacement available: &#34; + safe(replacementAvailable) + &#34;.&#34;)&#10;    + (if isEligableforWarranty = null then &#34;&#34; else &#34; Eligible for warranty: &#34; + safe(isEligableforWarranty) + &#34;.&#34;)&#10;    + (if ticketCreated = null then &#34;&#34; else &#34; Warehouse Ticket created: &#34; + safe(ticketCreated) + &#34;.&#34;)&#10;    + (if humanOpinion = null then &#34;&#34; else &#34; Human Opinion: &#34; + safe(humanOpinion) + &#34;.&#34;)&#10;  + (if reply = null then &#34;&#34; else &#34; Customer Reply: &#34; + safe(reply) + &#34;.&#34;)&#10;    + &#34; What do you want to propose to get a human opinion on?&#34;&#10;}.txt" target="internal_prompt" />
             <zeebe:input source="1" target="internal_choices" />
             <zeebe:input source="=append(concatenate(if is defined(internal_systemMessage) then [{&#34;role&#34;: &#34;system&#34;, &#34;content&#34;: internal_systemMessage}] else [], if is defined(internal_chatHistory) then internal_chatHistory else []), {&#34;role&#34;: &#34;user&#34;, &#34;content&#34;: internal_prompt})" target="internal_messages" />
             <zeebe:input source="={&#34;model&#34;: if is defined(internal_custom_model) then internal_custom_model else internal_model, &#34;messages&#34;: internal_messages, &#34;n&#34;: number(internal_choices), &#34;temperature&#34;: number(internal_temperature)}" target="body" />
@@ -171,32 +172,15 @@
         <bpmn:outgoing>Flow_0b0agqw</bpmn:outgoing>
       </bpmn:serviceTask>
       <bpmn:sequenceFlow id="Flow_0b0agqw" sourceRef="Activity_1x0d4ee" targetRef="Event_14m3ba1" />
-      <bpmn:intermediateCatchEvent id="Event_14m3ba1" zeebe:modelerTemplate="io.camunda.connectors.webhook.WebhookConnectorIntermediate.v1" zeebe:modelerTemplateVersion="13" zeebe:modelerTemplateIcon="data:image/svg+xml;base64,PHN2ZyBpZD0naWNvbicgeG1sbnM9J2h0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnJyB3aWR0aD0nMTgnIGhlaWdodD0nMTgnIHZpZXdCb3g9JzAgMCAzMiAzMic+CiAgPGRlZnM+CiAgICA8c3R5bGU+LmNscy0xIHsgZmlsbDogbm9uZTsgfTwvc3R5bGU+CiAgPC9kZWZzPgogIDxwYXRoCiAgICBkPSdNMjQsMjZhMywzLDAsMSwwLTIuODE2NC00SDEzdjFhNSw1LDAsMSwxLTUtNVYxNmE3LDcsMCwxLDAsNi45Mjg3LDhoNi4yNTQ5QTIuOTkxNCwyLjk5MTQsMCwwLDAsMjQsMjZaJy8+CiAgPHBhdGgKICAgIGQ9J00yNCwxNmE3LjAyNCw3LjAyNCwwLDAsMC0yLjU3LjQ4NzNsLTMuMTY1Ni01LjUzOTVhMy4wNDY5LDMuMDQ2OSwwLDEsMC0xLjczMjYuOTk4NWw0LjExODksNy4yMDg1Ljg2ODYtLjQ5NzZhNS4wMDA2LDUuMDAwNiwwLDEsMS0xLjg1MSw2Ljg0MThMMTcuOTM3LDI2LjUwMUE3LjAwMDUsNy4wMDA1LDAsMSwwLDI0LDE2WicvPgogIDxwYXRoCiAgICBkPSdNOC41MzIsMjAuMDUzN2EzLjAzLDMuMDMsMCwxLDAsMS43MzI2Ljk5ODVDMTEuNzQsMTguNDcsMTMuODYsMTQuNzYwNywxMy44OSwxNC43MDhsLjQ5NzYtLjg2ODItLjg2NzctLjQ5N2E1LDUsMCwxLDEsNi44MTItMS44NDM4bDEuNzMxNSwxLjAwMmE3LjAwMDgsNy4wMDA4LDAsMSwwLTEwLjM0NjIsMi4wMzU2Yy0uNDU3Ljc0MjctMS4xMDIxLDEuODcxNi0yLjA3MzcsMy41NzI4WicvPgogIDxyZWN0IGlkPSdfVHJhbnNwYXJlbnRfUmVjdGFuZ2xlXycgZGF0YS1uYW1lPScmbHQ7VHJhbnNwYXJlbnQgUmVjdGFuZ2xlJmd0OycgY2xhc3M9J2Nscy0xJwogICAgd2lkdGg9JzMyJyBoZWlnaHQ9JzMyJy8+Cjwvc3ZnPg==">
+      <bpmn:intermediateThrowEvent id="Event_14m3ba1" name="Customer Reply received">
         <bpmn:extensionElements>
-          <zeebe:properties>
-            <zeebe:property name="inbound.type" value="io.camunda:webhook:1" />
-            <zeebe:property name="inbound.method" value="post" />
-            <zeebe:property name="inbound.context" value="customerReply" />
-            <zeebe:property name="inbound.shouldValidateHmac" value="disabled" />
-            <zeebe:property name="inbound.auth.type" value="NONE" />
-            <zeebe:property name="consumeUnmatchedEvents" value="true" />
-            <zeebe:property name="correlationKeyExpression" value="" />
-            <zeebe:property name="deduplicationModeManualFlag" value="false" />
-            <zeebe:property name="deduplicationMode" value="AUTO" />
-            <zeebe:property name="resultVariable" value="" />
-            <zeebe:property name="resultExpression" value="" />
-          </zeebe:properties>
+          <zeebe:ioMapping>
+            <zeebe:output source="=&#34;Dear Miravelo Customer Service Team, thank you for your quick response and for confirming that a replacement tire is available and covered under warranty. &#10;1. As far as I can tell, there are no other damages besides the flat tire. &#10;2. Please ship the replacement tire directly to me. Let me know if you need my delivery address again or any additional details. Thanks again for your help. Best regards, Thomas&#34;" target="reply" />
+          </zeebe:ioMapping>
         </bpmn:extensionElements>
         <bpmn:incoming>Flow_0b0agqw</bpmn:incoming>
-        <bpmn:messageEventDefinition id="MessageEventDefinition_0lmuo27" messageRef="Message_07x347h" />
-      </bpmn:intermediateCatchEvent>
+      </bpmn:intermediateThrowEvent>
     </bpmn:adHocSubProcess>
-    <bpmn:boundaryEvent id="Event_0g6qce7" name="20 Minutes" attachedToRef="Activity_1ws6a1f">
-      <bpmn:outgoing>Flow_07a8l1d</bpmn:outgoing>
-      <bpmn:timerEventDefinition id="TimerEventDefinition_124pvtc">
-        <bpmn:timeDuration xsi:type="bpmn:tFormalExpression">PT20M</bpmn:timeDuration>
-      </bpmn:timerEventDefinition>
-    </bpmn:boundaryEvent>
     <bpmn:sequenceFlow id="Flow_14cpm2d" sourceRef="StartEvent_1" targetRef="Activity_12uelcr" />
     <bpmn:sequenceFlow id="Flow_11k6ax1" sourceRef="Activity_12uelcr" targetRef="Activity_1v1cyre" />
     <bpmn:sequenceFlow id="Flow_0br138x" sourceRef="Gateway_0b07diz" targetRef="Activity_1v1cyre">
@@ -221,7 +205,7 @@
           <zeebe:input source="gpt-4o" target="internal_model" />
           <zeebe:input source="1" target="internal_temperature" />
           <zeebe:input source="We received a support request from one of our customers. We are Miravelo a bike Company, selling high quality products. We want to be the best in service quality as well." target="internal_systemMessage" />
-          <zeebe:input source="={&#10;  safe: function(x) if x = null then &#34;&#34; else string(x),&#10;  txt:&#10;    &#34;Our customer &#34; + safe(customerNo)&#10;    + (if customerNo = null then &#34;&#34; else &#34; &#34;)&#10;    + (if orderId = null then &#34;&#34; else &#34;with his orderId &#34; + safe(orderId) + &#34; &#34;)&#10;    + &#34;contacted us with the following message: &#34; + safe(customerMessage)&#10;    + &#34;. We want to help him. We may need additional details now:&#34;&#10;    + (if orderStatus = null then &#34;&#34; else &#34; Order Status: &#34; + safe(orderStatus) + &#34;.&#34;)&#10;    + (if replacementAvailable = null then &#34;&#34; else &#34; Replacement available: &#34; + safe(replacementAvailable) + &#34;.&#34;)&#10;    + (if isEligableforWarranty = null then &#34;&#34; else &#34; Eligible for warranty: &#34; + safe(isEligableforWarranty) + &#34;.&#34;)&#10;    + (if ticketCreated = null then &#34;&#34; else &#34; Warehouse Ticket created: &#34; + safe(ticketCreated) + &#34;.&#34;)&#10;    + (if humanOpinion = null then &#34;&#34; else &#34; Human Opinion: &#34; + safe(humanOpinion) + &#34;.&#34;)&#10;    + &#34; Choose one of the following tools available for you. Stricly respond with Tool_1,..._2, .... You can also choose multiple at once. Separate them strictly via a comma, do not leave any space.&#34;&#10;    + &#34; Tool_1: Get order status from logistics; Tool_2: Check inventory for replacement; Tool_3: Decide warranty eligibility; Tool_4: Draft customer reply; Tool_5: Ask human for approval; Tool_6: Create ticket for warehouse or support.&#34;&#10;    + &#34; Return a blank body if you do not want to execute any of it.&#34;&#10;}.txt" target="internal_prompt" />
+          <zeebe:input source="={&#10;  safe: function(x) if x = null then &#34;&#34; else string(x),&#10;  txt:&#10;    &#34;Our customer &#34; + safe(customerNo)&#10;    + (if customerNo = null then &#34;&#34; else &#34; &#34;)&#10;    + (if orderId = null then &#34;&#34; else &#34;with his orderId &#34; + safe(orderId) + &#34; &#34;)&#10;    + &#34;contacted us with the following message: &#34; + safe(customerMessage)&#10;    + &#34;. We want to help him. We may need additional details now:&#34;&#10;    + (if orderStatus = null then &#34;&#34; else &#34; Order Status: &#34; + safe(orderStatus) + &#34;.&#34;)&#10;    + (if replacementAvailable = null then &#34;&#34; else &#34; Replacement available: &#34; + safe(replacementAvailable) + &#34;.&#34;)&#10;    + (if isEligableforWarranty = null then &#34;&#34; else &#34; Eligible for warranty: &#34; + safe(isEligableforWarranty) + &#34;.&#34;)&#10;    + (if ticketCreated = null then &#34;&#34; else &#34; Warehouse Ticket created: &#34; + safe(ticketCreated) + &#34;.&#34;)&#10;    + (if humanOpinion = null then &#34;&#34; else &#34; Human Opinion: &#34; + safe(humanOpinion) + &#34;.&#34;)&#10;    + (if reply = null then &#34;&#34; else &#34; Customer Reply: &#34; + safe(reply) + &#34;.&#34;)&#10;    + &#34; Choose one of the following tools available for you. Stricly respond with Tool_1,..._2, .... You can also choose multiple at once. Separate them strictly via a comma, do not leave any space.&#34;&#10;    + &#34; Tool_1: Get order status from logistics; Tool_2: Check inventory for replacement; Tool_3: Decide warranty eligibility; Tool_4: Draft customer reply; Tool_5: Ask human for approval; Tool_6: Create ticket for warehouse or support.&#34;&#10;    + &#34; Return a blank body if you do not want to execute any of it.&#34;&#10;}.txt" target="internal_prompt" />
           <zeebe:input source="1" target="internal_choices" />
           <zeebe:input source="=append(concatenate(if is defined(internal_systemMessage) then [{&#34;role&#34;: &#34;system&#34;, &#34;content&#34;: internal_systemMessage}] else [], if is defined(internal_chatHistory) then internal_chatHistory else []), {&#34;role&#34;: &#34;user&#34;, &#34;content&#34;: internal_prompt})" target="internal_messages" />
           <zeebe:input source="={&#34;model&#34;: if is defined(internal_custom_model) then internal_custom_model else internal_model, &#34;messages&#34;: internal_messages, &#34;n&#34;: number(internal_choices), &#34;temperature&#34;: number(internal_temperature)}" target="body" />
@@ -245,12 +229,13 @@
     <bpmn:endEvent id="Event_15nao8x" name="Support Case handeled">
       <bpmn:incoming>Flow_1axnb5n</bpmn:incoming>
     </bpmn:endEvent>
+    <bpmn:boundaryEvent id="Event_0g6qce7" name="20 Minutes" attachedToRef="Activity_1ws6a1f">
+      <bpmn:outgoing>Flow_07a8l1d</bpmn:outgoing>
+      <bpmn:timerEventDefinition id="TimerEventDefinition_124pvtc">
+        <bpmn:timeDuration xsi:type="bpmn:tFormalExpression">PT20M</bpmn:timeDuration>
+      </bpmn:timerEventDefinition>
+    </bpmn:boundaryEvent>
   </bpmn:process>
-  <bpmn:message id="Message_07x347h" name="4036dd0c-dd4e-406f-afd1-65d011cc75e4" zeebe:modelerTemplate="io.camunda.connectors.webhook.WebhookConnectorIntermediate.v1">
-    <bpmn:extensionElements>
-      <zeebe:subscription correlationKey="=customerNo + order" />
-    </bpmn:extensionElements>
-  </bpmn:message>
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Collaboration_1l97jvw">
       <bpmndi:BPMNShape id="Participant_0dt7tvu_di" bpmnElement="Participant_customerSupport" isHorizontal="true">
@@ -281,23 +266,8 @@
           <dc:Bounds x="966" y="595" width="68" height="40" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_1x28fxk_di" bpmnElement="Activity_19pjnlb" bioc:stroke="#0d4372" bioc:fill="#bbdefb" color:background-color="#bbdefb" color:border-color="#0d4372">
-        <dc:Bounds x="1310" y="240" width="100" height="80" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Gateway_0b07diz_di" bpmnElement="Gateway_0b07diz" isMarkerVisible="true">
-        <dc:Bounds x="1475" y="255" width="50" height="50" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="1467" y="312" width="67" height="27" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Event_15nao8x_di" bpmnElement="Event_15nao8x">
-        <dc:Bounds x="1592" y="262" width="36" height="36" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="1576" y="305" width="68" height="27" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_1cl8oyt_di" bpmnElement="Activity_1ws6a1f" isExpanded="true">
-        <dc:Bounds x="680" y="180" width="570" height="310" />
+        <dc:Bounds x="680" y="180" width="540" height="310" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_0zz4zg5_di" bpmnElement="Tool_1">
         <dc:Bounds x="710" y="200" width="100" height="80" />
@@ -328,8 +298,11 @@
       <bpmndi:BPMNShape id="Activity_0sr3i3r_di" bpmnElement="Activity_1x0d4ee">
         <dc:Bounds x="1000" y="290" width="100" height="80" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Event_158ufz4_di" bpmnElement="Event_14m3ba1">
+      <bpmndi:BPMNShape id="Event_0rh7rar_di" bpmnElement="Event_14m3ba1">
         <dc:Bounds x="1152" y="312" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1131" y="355" width="79" height="27" />
+        </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="Flow_0jqub2p_di" bpmnElement="Flow_0jqub2p">
         <di:waypoint x="950" y="420" />
@@ -343,6 +316,21 @@
         <di:waypoint x="1100" y="330" />
         <di:waypoint x="1152" y="330" />
       </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="Activity_1x28fxk_di" bpmnElement="Activity_19pjnlb" bioc:stroke="#0d4372" bioc:fill="#bbdefb" color:background-color="#bbdefb" color:border-color="#0d4372">
+        <dc:Bounds x="1310" y="240" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_0b07diz_di" bpmnElement="Gateway_0b07diz" isMarkerVisible="true">
+        <dc:Bounds x="1475" y="255" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1467" y="312" width="67" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_15nao8x_di" bpmnElement="Event_15nao8x">
+        <dc:Bounds x="1592" y="262" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1576" y="305" width="68" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_0ddzt07_di" bpmnElement="Event_0g6qce7">
         <dc:Bounds x="742" y="472" width="36" height="36" />
         <bpmndi:BPMNLabel>
@@ -378,7 +366,7 @@
         <di:waypoint x="982" y="570" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_0acrdq1_di" bpmnElement="Flow_0acrdq1">
-        <di:waypoint x="1250" y="280" />
+        <di:waypoint x="1220" y="280" />
         <di:waypoint x="1310" y="280" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_1d7ctj9_di" bpmnElement="Flow_1d7ctj9">
