@@ -12,7 +12,6 @@
         <zeebe:taskDefinition type="newsletter.abortRegistration" />
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_1l1lj4m</bpmn:incoming>
-      <bpmn:incoming>Flow_1ju8yjy</bpmn:incoming>
       <bpmn:outgoing>Flow_1bsb8no</bpmn:outgoing>
     </bpmn:serviceTask>
     <bpmn:boundaryEvent id="Timer_After3Days" name="After 3&#10;days" attachedToRef="SubProcess_Confirmation">
@@ -95,11 +94,6 @@
       <bpmn:incoming>Flow_1i7hjid</bpmn:incoming>
       <bpmn:messageEventDefinition id="MessageEventDefinition_0epolm0" />
     </bpmn:endEvent>
-    <bpmn:sequenceFlow id="Flow_1ju8yjy" sourceRef="Event_0870zei" targetRef="Activity_AbortRegistration" />
-    <bpmn:boundaryEvent id="Event_0870zei" name="Rejected Subscription" attachedToRef="SubProcess_Confirmation">
-      <bpmn:outgoing>Flow_1ju8yjy</bpmn:outgoing>
-      <bpmn:messageEventDefinition id="MessageEventDefinition_0p5ifoc" />
-    </bpmn:boundaryEvent>
   </bpmn:process>
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="newsletter-subscription">
@@ -178,15 +172,9 @@
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_0i6u6yw_di" bpmnElement="Timer_After3Days">
-        <dc:Bounds x="702" y="202" width="36" height="36" />
+        <dc:Bounds x="682" y="202" width="36" height="36" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="728" y="176" width="33" height="27" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Event_0vnctf6_di" bpmnElement="Event_0870zei">
-        <dc:Bounds x="632" y="202" width="36" height="36" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="569" y="172" width="61" height="27" />
+          <dc:Bounds x="708" y="176" width="33" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="Flow_09cuvzp_di" bpmnElement="Flow_09cuvzp">
@@ -206,13 +194,8 @@
         <di:waypoint x="982" y="320" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_1l1lj4m_di" bpmnElement="Flow_1l1lj4m">
-        <di:waypoint x="720" y="202" />
-        <di:waypoint x="720" y="120" />
-        <di:waypoint x="820" y="120" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_1ju8yjy_di" bpmnElement="Flow_1ju8yjy">
-        <di:waypoint x="650" y="202" />
-        <di:waypoint x="650" y="120" />
+        <di:waypoint x="700" y="202" />
+        <di:waypoint x="700" y="120" />
         <di:waypoint x="820" y="120" />
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>

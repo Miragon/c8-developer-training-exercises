@@ -1,0 +1,15 @@
+meta {
+  name: Payment Received
+  type: http
+  seq: 5
+}
+
+post {
+  url: http://localhost:8081/api/bike-subscriptions/:subscriptionId/payment-received
+  body: none
+  auth: none
+}
+
+params:path {
+  subscriptionId: {{subscriptionId}}
+}

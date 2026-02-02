@@ -1,0 +1,15 @@
+meta {
+  name: Cancel Bike Subscription
+  type: http
+  seq: 6
+}
+
+post {
+  url: http://localhost:8081/api/bike-subscriptions/:subscriptionId/cancel
+  body: none
+  auth: none
+}
+
+params:path {
+  subscriptionId: {{subscriptionId}}
+}

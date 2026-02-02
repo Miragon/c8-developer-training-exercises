@@ -1,0 +1,23 @@
+meta {
+  name: Start Bike Subscription
+  type: http
+  seq: 4
+}
+
+post {
+  url: http://localhost:8081/api/bike-subscriptions
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "bikeId": "163aef88-cd50-4174-8db8-5d92432cf6c4",
+    "email": "customer@example.com",
+    "name": "John Doe"
+  }
+}
+
+vars:post-response {
+  subscriptionId: res.body.subscriptionId
+}

@@ -1,6 +1,7 @@
 package de.emaarco.example.adapter.outbound.zeebe.bike
 
 import com.ninjasquad.springmockk.MockkBean
+import de.emaarco.example.adapter.process.TestProcessEngineConfiguration
 import de.emaarco.example.application.port.inbound.bike.CheckBikeAvailabilityUseCase
 import de.emaarco.example.application.port.inbound.bike.NotifyBikeCancelationUseCase
 import de.emaarco.example.application.port.inbound.bike.SendBikeConfirmationMailUseCase
@@ -8,18 +9,14 @@ import de.emaarco.example.application.port.inbound.bike.SendBikeWelcomeMailUseCa
 import de.emaarco.example.application.port.inbound.bike.SendPaymentReminderUseCase
 import de.emaarco.example.application.port.inbound.bike.SendRejectionMailUseCase
 import de.emaarco.example.application.port.inbound.bike.ShipBikeUseCase
-import de.emaarco.example.adapter.process.TestProcessEngineConfiguration
 import io.camunda.process.test.api.CamundaProcessTestContext
 import io.camunda.process.test.api.CamundaSpringProcessTest
-import io.mockk.Runs
-import io.mockk.every
-import io.mockk.just
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.fail
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.context.annotation.Import
-import org.junit.jupiter.api.fail
 
 /**
  * Process test scaffolding for the Bike Subscription Process.
@@ -63,13 +60,7 @@ class BikeSubscriptionProcessTest {
 
     @BeforeEach
     fun setup() {
-        every { checkAvailabilityUseCase.checkAvailability(any()) } returns true
-        every { sendRejectionMailUseCase.sendRejectionMail(any()) } just Runs
-        every { sendConfirmationMailUseCase.sendConfirmationMail(any()) } just Runs
-        every { sendPaymentReminderUseCase.sendPaymentReminder(any()) } just Runs
-        every { notifyCancelationUseCase.notifyCancelation(any()) } just Runs
-        every { shipBikeUseCase.shipBike(any()) } just Runs
-        every { sendWelcomeMailUseCase.sendWelcomeMail(any()) } just Runs
+        // define mocks
     }
 
     @Test

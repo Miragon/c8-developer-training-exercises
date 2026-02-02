@@ -13,7 +13,7 @@ server:
 
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/example_database
+    url: jdbc:postgresql://localhost:5432/c8-dev-training
     username: admin
     password: admin
     driver-class-name: org.postgresql.Driver
