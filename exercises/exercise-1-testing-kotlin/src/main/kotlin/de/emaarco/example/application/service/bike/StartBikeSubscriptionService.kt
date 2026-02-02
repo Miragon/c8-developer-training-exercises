@@ -26,7 +26,7 @@ class StartBikeSubscriptionService(
         repository.save(subscription)
         log.info { "Bike subscription created: ${subscription.id}" }
 
-        processPort.startSubscription(subscription.id, subscription.bikeId)
+        processPort.startSubscription(subscription.id)
         log.info { "Bike subscription process started for: ${subscription.id}" }
 
         return subscription.id

@@ -7,18 +7,21 @@ Master distributed transaction patterns with Camunda 8.
 ## 🎯 What You'll Build
 
 Two critical patterns for reliable distributed systems:
+
 1. **Outbox Pattern** - Never lose a message to Zeebe
 2. **Idempotency Pattern** - Handle retries without duplicate side effects
 
 ## 🚀 Getting Started
 
 ### 1. Start Infrastructure
+
 ```bash
 cd ../../stack
 docker-compose up -d
 ```
 
 ### 2. Run Application
+
 ```bash
 cd exercises/exercise-2-outbox-java
 ../../gradlew bootRun
@@ -27,6 +30,7 @@ cd exercises/exercise-2-outbox-java
 App runs on: http://localhost:8081
 
 ### 3. Test It Out
+
 ```bash
 # Subscribe to newsletter
 curl -X POST http://localhost:8081/api/subscriptions/subscribe \
@@ -41,16 +45,16 @@ curl -X POST http://localhost:8081/api/subscriptions/subscribe \
 Implement 4 files to reliably deliver messages:
 
 1. **ProcessMessageEntity.java** - Design the outbox table
-   - Fields: messageId, messageName, correlationId, variables, status, retryCount
+    - Fields: messageId (random uuid), messageName, correlationId, variables, status, retryCount
 
 2. **ProcessMessageJpaRepository.java** - Add pessimistic locking
-   - Implement `findFirstByStatusWithLock()` method
+    - Implement `findFirstByStatusWithLock()` method
 
 3. **ProcessMessagePersistenceAdapter.java** - Save to DB instead of direct Zeebe
-   - Write messages with PENDING status
+    - Write messages with PENDING status
 
 4. **ProcessEngineOutboxScheduler.java** - Background message sender
-   - Process outbox every 200ms
+    - Process outbox every 200ms
 
 ### 🎯 Key Concept
 
@@ -60,7 +64,9 @@ DB writes + outbox writes = **same transaction** = guaranteed delivery! 🎉
 
 ```sql
 -- Watch messages flow through
-SELECT * FROM process_message ORDER BY created_at DESC;
+SELECT *
+FROM process_message
+ORDER BY created_at DESC;
 ```
 
 Status should change: `PENDING` → `SENT`
@@ -72,16 +78,16 @@ Status should change: `PENDING` → `SENT`
 Prevent duplicate operations from job retries:
 
 1. **ProcessedOperationEntity.java** - Track completed operations
-   - Composite key: subscriptionId + elementId
+    - Composite key: subscriptionId + elementId
 
 2. **ProcessedOperationPersistenceAdapter.java** - Check & record
-   - `existsById()` - already processed?
-   - `save()` - mark as done
+    - `existsById()` - already processed?
+    - `save()` - mark as done
 
 3. **Update 3 services** - Add Check-Execute-Record pattern
-   - SendConfirmationMailService.java
-   - SendWelcomeMailService.java
-   - IncrementSubscriptionCounterService.java
+    - SendConfirmationMailService.java
+    - SendWelcomeMailService.java
+    - IncrementSubscriptionCounterService.java
 
 ### 🎯 Key Concept
 
@@ -91,7 +97,9 @@ Prevent duplicate operations from job retries:
 
 ```sql
 -- See what's been processed
-SELECT * FROM processed_operations ORDER BY processed_at DESC;
+SELECT *
+FROM processed_operations
+ORDER BY processed_at DESC;
 ```
 
 Kill the app mid-flight and restart - no duplicate emails or counter increments!

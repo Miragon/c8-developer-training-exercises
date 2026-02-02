@@ -3,4 +3,4 @@ package de.emaarco.example.domain.bike
 import java.util.UUID
 
 @JvmInline
-value class BikeId(val value: UUID)
+value class BikeId(val value: UUID = UUID.randomUUID())

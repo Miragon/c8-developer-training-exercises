@@ -1,9 +1,9 @@
 package de.emaarco.example.adapter.outbound.zeebe.bike
 
-import de.emaarco.example.adapter.process.generated.BikeSubscriptionSignupProcessApi
-import de.emaarco.example.application.port.outbound.bike.BikeSubscriptionProcess
 import de.emaarco.example.adapter.process.config.ProcessEngineApi
-import de.emaarco.example.domain.bike.BikeId
+import de.emaarco.example.adapter.process.generated.BikeSubscriptionSignupProcessApi
+import de.emaarco.example.adapter.process.generated.BikeSubscriptionSignupProcessApi.Variables.SUBSCRIPTION_ID
+import de.emaarco.example.application.port.outbound.bike.BikeSubscriptionProcess
 import de.emaarco.example.domain.bike.BikeSubscriptionId
 import org.springframework.stereotype.Component
 
@@ -12,11 +12,8 @@ class BikeSubscriptionProcessAdapter(
     private val engineApi: ProcessEngineApi
 ) : BikeSubscriptionProcess {
 
-    override fun startSubscription(id: BikeSubscriptionId, bikeId: BikeId): Long {
-        val variables = mapOf(
-            "subscriptionId" to id.value.toString(),
-            "bikeId" to bikeId.value.toString()
-        )
+    override fun startSubscription(id: BikeSubscriptionId): Long {
+        val variables = mapOf(SUBSCRIPTION_ID to id.value.toString())
         return engineApi.startProcess(
             processId = BikeSubscriptionSignupProcessApi.PROCESS_ID,
             variables = variables
