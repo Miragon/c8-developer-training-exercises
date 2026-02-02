@@ -1,5 +1,53 @@
 {
-  "components": [],
+  "components": [
+    {
+      "text": "# Your opinion is needed",
+      "type": "text",
+      "layout": {
+        "row": "Row_07ppy1b",
+        "columns": null
+      },
+      "id": "Field_1n1p6l8"
+    },
+    {
+      "text": "Please check on the proposal of the AI Agent:",
+      "type": "text",
+      "layout": {
+        "row": "Row_0np5zkl",
+        "columns": null
+      },
+      "id": "Field_131sxdm"
+    },
+    {
+      "label": "Agent Proposal",
+      "type": "textarea",
+      "layout": {
+        "row": "Row_152aa9m",
+        "columns": null
+      },
+      "id": "Field_1hqm0iy",
+      "key": "proposedActions",
+      "disabled": true
+    },
+    {
+      "type": "separator",
+      "layout": {
+        "row": "Row_1yidup2",
+        "columns": null
+      },
+      "id": "Field_0rfcjab"
+    },
+    {
+      "label": "Your Feedback goes here:",
+      "type": "textarea",
+      "layout": {
+        "row": "Row_0v3xnzz",
+        "columns": null
+      },
+      "id": "Field_17f9c8z",
+      "key": "humanOpinion"
+    }
+  ],
   "type": "default",
   "id": "Form_HumanOpinion",
   "executionPlatform": "Camunda Cloud",
