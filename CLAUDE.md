@@ -4,158 +4,154 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-Easy Zeebe is a Spring Boot-based example project demonstrating Zeebe process engine integration. It consists of three Gradle modules and a React frontend:
+This is a Camunda 8 Developer Training repository containing hands-on exercises for learning Zeebe process orchestration, BPMN testing, distributed transaction patterns, and custom connector development. The project is a multi-module Maven build with exercises available in both Java and Kotlin.
 
-- **example-service**: The main application with newsletter subscription process implementation
-- **common-zeebe**: Shared Zeebe integration utilities and configuration 
-- **common-zeebe-test**: Testing utilities for Zeebe process testing
-- **frontend**: React TypeScript frontend with Tailwind CSS for newsletter subscription UI
+## Build System & Commands
 
-## Development Setup
+**Root level:**
+- `mvn clean install` - Build all modules
+- `mvn test` - Run all tests across modules
 
-### Prerequisites
-- Java 21 (configured via Gradle toolchain)
-- Node.js 18+ and npm (for frontend)
-- Docker and Docker Compose for infrastructure
-- PostgreSQL database (via Docker)
+**Individual exercises:**
+- Navigate to specific exercise directory (e.g., `cd exercises/exercise-1-testing-java`)
+- `mvn test` - Run tests for that exercise
+- `mvn spring-boot:run` - Run Spring Boot application (for exercises 2 and 3)
 
-### Starting the Application
+**Infrastructure:**
+- `cd stack && docker-compose up -d` - Start Camunda 8 stack (Zeebe, Operate, Tasklist, Connectors, PostgreSQL, Elasticsearch)
+- `docker-compose down` - Stop infrastructure
+- Access Camunda UI at http://localhost:8080 (credentials: demo/demo)
 
-1. **Start Infrastructure**:
-   ```bash
-   cd stack
-   docker-compose up -d
-   ```
-   This starts PostgreSQL, Camunda Platform (unified Zeebe, Operate, Tasklist), and Elasticsearch.
+**API Testing:**
+- Bruno API collection available in `bruno/` directory for testing process endpoints
 
-2. **Run Backend**:
-   ```bash
-   ./gradlew :services:example-service:bootRun
-   ```
-   Application runs on port 8081.
+## Technology Stack
 
-3. **Run Frontend** (in separate terminal):
-   ```bash
-   cd frontend
-   npm install
-   npm run dev
-   ```
-   Frontend runs on port 3000 with API proxy configured.
+- Java 21 & Kotlin
+- Spring Boot 3.4.1
+- Camunda 8 (Zeebe 8.8.2)
+- PostgreSQL 17.5 for persistence
+- H2 for test database
+- Mockito for mocking in tests
+- Maven for build management
 
-## Build Commands
+## Architecture Pattern: Hexagonal/Ports & Adapters
 
-### Backend
-```bash
-# Build entire project
-./gradlew build
+The codebase follows hexagonal architecture principles:
 
-# Run tests for all modules
-./gradlew test
-
-# Run tests for specific module
-./gradlew :services:example-service:test
-./gradlew :services:common-zeebe:test
-
-# Generate BPMN models from BPMN files
-./gradlew :services:example-service:generateBpmnModels
-
-# Clean build artifacts
-./gradlew clean
+```
+src/main/java/io/miragon/example/
+├── adapter/           # Infrastructure layer
+│   ├── in/           # Inbound adapters (REST controllers, message receivers)
+│   ├── out/          # Outbound adapters (database, external APIs)
+│   └── process/      # Process adapters (Zeebe workers, process message handling)
+├── application/      # Application services (use cases)
+└── domain/           # Core domain models and business logic
 ```
 
-### Frontend
-```bash
-cd frontend
+**Key concepts:**
+- **Domain layer**: Pure business logic, no framework dependencies
+- **Application layer**: Orchestrates domain objects and coordinates workflows
+- **Adapter layer**: Framework-specific implementations (Spring, Zeebe, JPA)
+- **Inbound adapters**: REST APIs, Zeebe workers that receive jobs
+- **Outbound adapters**: Database persistence, process engine clients, external services
 
-# Install dependencies
-npm install
+## Camunda 8 Process Testing
 
-# Start development server
-npm run dev
+Exercises 1 (Java/Kotlin) focus on BPMN process testing using `@CamundaSpringProcessTest`:
 
-# Build for production
-npm run build
+**Key testing patterns:**
+- Use `processTestContext.increaseTime(Duration)` to trigger timer events
+- Message correlation: `processPort.sendPaymentReceived(correlationKey)`
+- Process assertions: `assertThatProcessInstance(byKey(instanceKey)).isCompleted()`
+- Element completion checks: `hasCompletedElement(elementId, count)`
+- Mock workers with Mockito to verify business logic invocation
 
-# Run type checking
-npm run type-check
+**Test scenarios covered:**
+- Happy path flows
+- Error/cancellation paths
+- Timer-triggered events (reminders, timeouts)
+- Message correlation patterns
+- End-to-end integration tests
+
+## Distributed Patterns (Exercise 2)
+
+**Outbox Pattern:**
+- Ensures reliable message delivery to Zeebe by storing messages in database first
+- `ProcessMessageEntity` with status (PENDING → SENT)
+- Background scheduler (`ProcessEngineOutboxScheduler`) processes outbox every 200ms
+- Uses pessimistic locking (`@Lock(LockModeType.PESSIMISTIC_WRITE)`) to prevent race conditions
+- Database write + outbox write = same transaction = guaranteed delivery
+
+**Idempotency Pattern:**
+- Prevents duplicate operations from job retries
+- `ProcessedOperationEntity` tracks completed operations with composite key (subscriptionId + elementId)
+- Check-Execute-Record pattern in workers:
+  1. Check if operation already processed
+  2. Execute business logic
+  3. Record operation as completed (in same transaction)
+
+## Custom Connector Development (Exercise 3)
+
+Exercise 3 teaches building custom Camunda outbound connectors:
+
+**Key principles:**
+- Keep BPMN clean by encapsulating technical complexity in connectors
+- Use domain-focused activities in process models (e.g., "Notify Customer" instead of "Send Email via SendGrid")
+- Connectors should be reusable and environment-agnostic
+- Implement hexagonal architecture in connectors to decouple external APIs from business logic
+- Separate input/output adapters for vendor-specific implementations
+
+## BPMN Resources
+
+Process definitions are located in `src/main/resources/bpmn/`:
+- `newsletter.bpmn` - Newsletter subscription process (completed reference)
+- `bike-subscription.bpmn` - Bike subscription process (exercise to implement)
+
+## Database Access
+
+PostgreSQL runs on `localhost:5432` (credentials: admin/admin):
+```sql
+-- Monitor outbox pattern
+SELECT * FROM process_message ORDER BY created_at DESC;
+
+-- Monitor idempotency tracking
+SELECT * FROM processed_operations ORDER BY processed_at DESC;
 ```
 
-## Architecture
+## Common Patterns
 
-### Module Structure
-- **Hexagonal Architecture**: example-service follows ports & adapters pattern with clear separation of concerns
-- **Domain**: Core business entities (Email, Name, NewsletterSubscription, etc.)
-- **Application**: Use cases and services
-- **Adapters**: 
-  - Inbound: REST controllers and Zeebe job workers
-  - Outbound: Database persistence and Zeebe process adapters
+**Zeebe Worker Implementation:**
+```java
+@JobWorker(type = "check-bike-availability")
+public void checkAvailability(ActivatedJob job) {
+    // Extract variables
+    var subscriptionId = job.getVariableAsType("subscriptionId", String.class);
 
-### Key Components
+    // Business logic
+    var isAvailable = useCase.checkAvailability(subscriptionId);
 
-#### Zeebe Integration
-- **ProcessEngineApi**: Main interface for starting processes and sending messages
-- **JobWorker**: Annotation-based job workers (implemented via common-zeebe)
-- **ZeebeClient**: Auto-configured Spring Boot starter integration
-
-#### Process Testing
-- **ZeebeProcessTest**: Base class providing process testing capabilities
-- **JobWorkerManager**: Manages job worker lifecycle during tests
-- **TimerUtils**: Utilities for handling process timers in tests
-
-### Configuration
-- **application.yaml**: Database and application configuration
-- **zeebe-application.yaml**: Zeebe-specific configuration loaded via custom property source
-- **docker-compose.yml**: Complete infrastructure stack including Camunda Platform 8.8 (unified orchestration), PostgreSQL, and Elasticsearch
-
-### BPMN Processing
-- BPMN files located in `src/main/resources/bpmn/`
-- Custom Gradle plugin generates Kotlin models from BPMN files
-- Process definitions automatically deployed on application startup
-
-## Testing
-
-### Running Tests
-```bash
-# All tests
-./gradlew test
-
-# Specific module tests  
-./gradlew :services:example-service:test
-
-# Process integration tests
-./gradlew :services:example-service:test --tests "*ProcessTest*"
+    // Complete job with result
+    client.newCompleteCommand(job)
+        .variables(Map.of("available", isAvailable))
+        .send();
+}
 ```
 
-### Test Architecture
-- Process tests extend `ZeebeProcessTest` base class
-- In-memory Zeebe engine for integration testing
-- Job workers automatically registered during tests
-- Timer manipulation utilities available via `TimerUtils`
+**Process Port Pattern:**
+Process interaction abstraction separates BPMN engine details from application layer. Implement `ProcessPort` interface in adapter layer.
 
-## Infrastructure Access
-- **Frontend UI**: http://localhost:3000
-- **Backend API**: http://localhost:8081
-- **Zeebe Gateway**: localhost:26500
-- **Camunda Web UI** (Operate/Tasklist): http://localhost:8080
-- **PostgreSQL**: localhost:5432 (admin/admin)
-- **Elasticsearch**: http://localhost:9200
+## Testing Strategy
 
-## Key Files
-- `services/example-service/src/main/resources/bpmn/newsletter.bpmn`: Main process definition
-- `services/example-service/src/main/kotlin/de/emaarco/example/ExampleApplication.kt`: Application entry point
-- `services/common-zeebe/src/main/kotlin/de/emaarco/common/zeebe/engine/ProcessEngineApi.kt`: Core Zeebe API
-- `frontend/src/App.tsx`: Main React frontend component with newsletter subscription form
-- `frontend/src/services/api.ts`: API client for backend communication
+- Unit tests for domain logic (pure Java/Kotlin)
+- Integration tests for adapters with mocked dependencies
+- Process tests using `camunda-process-test-spring` with in-memory engine
+- Use `@SpringBootTest` with H2 database for full integration tests
+- Mock external dependencies (email services, APIs) in tests
 
-## Working with GitHub
-Use the `gh` CLI for GitHub operations:
-```bash
-# View repository info
-gh repo view owner/repo
+## Version Information
 
-# Fetch file contents from GitHub
-gh api repos/owner/repo/contents/path/to/file --jq '.content' | base64 -d
-
-# List repository contents
-gh api repos/owner/repo/contents/directory
-```
+- Camunda Platform: 8.8.9
+- Zeebe: 8.8.2
+- Elasticsearch: 8.17.0
+- Camunda Connectors: 8.8.5

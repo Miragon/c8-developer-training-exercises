@@ -1,0 +1,36 @@
+name: Pre-Merge Checks
+
+on:
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    name: Build with Maven
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Checkout code
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      # Step 2: Set up JDK 21 with Maven
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+          cache: 'maven'
+
+      # Step 3: Compile the main module
+      - name: Compile Production Code
+        run: mvn clean compile
+
+      # Step 4: Compile the test module
+      - name: Compile Test Code
+        run: mvn test-compile
+
+      # Step 5: Run tests, excluding the ones to fail on purpose
+      # (because, for example, they should be implemented by our participants)
+      - name: Run Tests (CI Mode)
+        run: mvn test -Dtest.profile=ci
