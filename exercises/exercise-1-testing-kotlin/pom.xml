@@ -21,14 +21,14 @@
         <maven.compiler.target>${java.version}</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-        <spring-boot.version>3.5.10</spring-boot.version>
-        <kotlin.version>2.3.0</kotlin.version>
-        <zeebe.version>8.8.10</zeebe.version>
-        <postgresql.version>42.7.9</postgresql.version>
+        <spring-boot.version>4.0.5</spring-boot.version>
+        <kotlin.version>2.3.20</kotlin.version>
+        <zeebe.version>8.8.21</zeebe.version>
+        <postgresql.version>42.7.10</postgresql.version>
         <kotlin-logging.version>3.0.5</kotlin-logging.version>
         <mockk.version>1.14.9</mockk.version>
         <spring-mockk.version>5.0.1</spring-mockk.version>
-        <kotlin-mockito.version>6.2.3</kotlin-mockito.version>
+        <kotlin-mockito.version>6.3.0</kotlin-mockito.version>
     </properties>
 
     <dependencyManagement>
@@ -208,7 +208,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <version>3.5.4</version>
+                <version>3.5.5</version>
             </plugin>
         </plugins>
     </build>
