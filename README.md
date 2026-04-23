@@ -26,6 +26,25 @@ Hands-on exercises for our Zeebe training program.
 2. Choose your exercise and follow its README
 3. Access Camunda UI at http://localhost:8080 (demo/demo)
 
----
+## 📁 Repository Structure
 
-**Need help?** Check individual exercise READMEs for detailed instructions.
+```
+exercises/
+├── exercise-1-testing-java/      # BPMN process testing (Java)
+├── exercise-1-testing-kotlin/    # BPMN process testing (Kotlin)
+├── exercise-2-outbox-java/       # Outbox & idempotency patterns (Java)
+├── exercise-2-outbox-kotlin/     # Outbox & idempotency patterns (Kotlin)
+├── exercise-3-connector-java/    # Custom outbound connector (Java)
+└── exercise-4-agentic-orchestration/  # AI-powered orchestration
+stack/                            # Docker Compose infrastructure
+bruno/                            # API test collection
+```
+
+## 🛠️ Tech Stack
+
+- **Java 21** & **Kotlin**
+- **Spring Boot 3.4.1**
+- **Camunda 8** (Zeebe 8.8.2)
+- **PostgreSQL 17.5** for persistence
+- **H2** for test database
+- **Maven** for build management
