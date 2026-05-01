@@ -21,12 +21,12 @@
         <maven.compiler.target>${java.version}</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-        <spring-boot.version>4.0.5</spring-boot.version>
-        <kotlin.version>2.3.20</kotlin.version>
-        <zeebe.version>8.9.0</zeebe.version>
-        <postgresql.version>42.7.10</postgresql.version>
+        <spring-boot.version>4.0.6</spring-boot.version>
+        <kotlin.version>2.3.21</kotlin.version>
+        <zeebe.version>8.9.2</zeebe.version>
+        <postgresql.version>42.7.11</postgresql.version>
         <kotlin-logging.version>3.0.5</kotlin-logging.version>
-        <kotlin-jackson.version>2.21.2</kotlin-jackson.version>
+        <kotlin-jackson.version>2.21.3</kotlin-jackson.version>
         <mockk.version>1.14.9</mockk.version>
         <spring-mockk.version>5.0.1</spring-mockk.version>
         <kotlin-mockito.version>6.3.0</kotlin-mockito.version>
