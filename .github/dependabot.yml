@@ -16,7 +16,20 @@ updates:
           - "major"
 
   # Config for Docker Compose dependencies
-  - package-ecosystem: "docker"
-    directory: "/stack"
+  - package-ecosystem: "docker-compose"
+    directories:
+      - "/stack"
     schedule:
       interval: "monthly"
+    labels:
+      - "dependencies"
+    assignees:
+      - "emaarco"
+    groups:
+      docker-compose:
+        patterns:
+          - "*"
+        update-types:
+          - "patch"
+          - "minor"
+          - "major"
