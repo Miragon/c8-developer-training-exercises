@@ -23,7 +23,7 @@ public class CheckBikeAvailabilityWorker {
         this.useCase = useCase;
     }
 
-    @JobWorker(type = BikeSubscriptionSignupProcessApi.TaskTypes.BIKE_CHECK_AVAILABILITY)
+    @JobWorker(type = BikeSubscriptionSignupProcessApi.ServiceTasks.BIKE_CHECK_AVAILABILITY)
     public Map<String, Object> handle(@Variable String subscriptionId) {
         log.info("Checking bike availability for subscription: {}", subscriptionId);
         boolean available = useCase.checkAvailability(new BikeSubscriptionId(UUID.fromString(subscriptionId)));

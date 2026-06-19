@@ -15,7 +15,7 @@ class SendRejectionMailWorker(
 ) {
     private val log = KotlinLogging.logger {}
 
-    @JobWorker(type = BikeSubscriptionSignupProcessApi.TaskTypes.ACTIVITY_SEND_REJECTION_MAIL)
+    @JobWorker(type = BikeSubscriptionSignupProcessApi.ServiceTasks.BIKE_SEND_REJECTION_MAIL)
     fun handle(@Variable subscriptionId: String) {
         log.info { "Sending rejection mail for subscription: $subscriptionId" }
         useCase.sendRejectionMail(BikeSubscriptionId(UUID.fromString(subscriptionId)))

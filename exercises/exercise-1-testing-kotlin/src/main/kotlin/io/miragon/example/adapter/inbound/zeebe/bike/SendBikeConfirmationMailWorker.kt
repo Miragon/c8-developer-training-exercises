@@ -15,7 +15,7 @@ class SendBikeConfirmationMailWorker(
 ) {
     private val log = KotlinLogging.logger {}
 
-    @JobWorker(type = BikeSubscriptionSignupProcessApi.TaskTypes.ACTIVITY_SEND_CONFIRMATION_MAIL)
+    @JobWorker(type = BikeSubscriptionSignupProcessApi.ServiceTasks.BIKE_SEND_CONFIRMATION_MAIL)
     fun handle(@Variable subscriptionId: String) {
         log.info { "Sending bike confirmation mail for subscription: $subscriptionId" }
         useCase.sendConfirmationMail(BikeSubscriptionId(UUID.fromString(subscriptionId)))

@@ -22,7 +22,7 @@ public class NotifyBikeCancelationWorker {
         this.useCase = useCase;
     }
 
-    @JobWorker(type = BikeSubscriptionSignupProcessApi.TaskTypes.BIKE_NOTIFY_CANCELATION)
+    @JobWorker(type = BikeSubscriptionSignupProcessApi.ServiceTasks.BIKE_NOTIFY_CANCELATION)
     public void handle(@Variable String subscriptionId) {
         log.info("Notifying about cancelation for subscription: {}", subscriptionId);
         useCase.notifyCancelation(new BikeSubscriptionId(UUID.fromString(subscriptionId)));

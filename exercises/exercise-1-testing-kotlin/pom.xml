@@ -29,6 +29,7 @@
         <mockk.version>1.14.11</mockk.version>
         <spring-mockk.version>5.0.1</spring-mockk.version>
         <kotlin-mockito.version>6.3.0</kotlin-mockito.version>
+        <bpmn-to-code.version>3.0.0</bpmn-to-code.version>
     </properties>
 
     <dependencyManagement>
@@ -86,6 +87,13 @@
             <groupId>io.camunda</groupId>
             <artifactId>camunda-spring-boot-starter</artifactId>
             <version>${zeebe.version}</version>
+        </dependency>
+
+        <!-- bpmn-to-code runtime types for the generated Process API -->
+        <dependency>
+            <groupId>io.miragon</groupId>
+            <artifactId>bpmn-to-code-runtime</artifactId>
+            <version>${bpmn-to-code.version}</version>
         </dependency>
 
         <!-- Database -->
@@ -209,6 +217,26 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>3.5.6</version>
+            </plugin>
+            <plugin>
+                <groupId>io.miragon</groupId>
+                <artifactId>bpmn-to-code-maven</artifactId>
+                <version>${bpmn-to-code.version}</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>generate-bpmn-api</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <baseDir>${project.basedir}</baseDir>
+                    <filePattern>src/main/resources/bpmn/*.bpmn</filePattern>
+                    <outputFolderPath>${project.basedir}/src/main/kotlin</outputFolderPath>
+                    <packagePath>io.miragon.example.adapter.process.generated</packagePath>
+                    <outputLanguage>KOTLIN</outputLanguage>
+                    <processEngine>ZEEBE</processEngine>
+                </configuration>
             </plugin>
         </plugins>
     </build>

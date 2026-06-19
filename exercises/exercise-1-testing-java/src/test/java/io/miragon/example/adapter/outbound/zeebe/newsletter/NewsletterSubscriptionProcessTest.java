@@ -89,15 +89,15 @@ class NewsletterSubscriptionProcessTest {
         processTestContext.increaseTime(Duration.ofSeconds(60));
         CamundaAssert
             .assertThatProcessInstance(byKey(instanceKey))
-            .hasCompletedElement(ACTIVITY_SEND_CONFIRMATION_MAIL, 1);
+            .hasCompletedElement(ACTIVITY_SEND_CONFIRMATION_MAIL.getValue(),1);
 
         processTestContext.increaseTime(Duration.ofSeconds(60));
         CamundaAssert.assertThatProcessInstance(byKey(instanceKey))
-            .hasCompletedElement(ACTIVITY_SEND_CONFIRMATION_MAIL, 2);
+            .hasCompletedElement(ACTIVITY_SEND_CONFIRMATION_MAIL.getValue(),2);
 
         processTestContext.increaseTime(Duration.ofSeconds(30));
         CamundaAssert.assertThatProcessInstance(byKey(instanceKey))
-            .hasCompletedElement(ACTIVITY_ABORT_REGISTRATION, 1);
+            .hasCompletedElement(ACTIVITY_ABORT_REGISTRATION.getValue(), 1);
 
         // then - process should abort
         CamundaAssert.assertThatProcessInstance(byKey(instanceKey)).isCompleted();

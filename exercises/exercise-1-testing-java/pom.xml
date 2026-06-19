@@ -25,6 +25,7 @@
         <zeebe.version>8.9.6</zeebe.version>
         <postgresql.version>42.7.11</postgresql.version>
         <mockito.version>5.23.0</mockito.version>
+        <bpmn-to-code.version>3.0.0</bpmn-to-code.version>
     </properties>
 
     <dependencyManagement>
@@ -60,6 +61,13 @@
             <groupId>io.camunda</groupId>
             <artifactId>camunda-spring-boot-starter</artifactId>
             <version>${zeebe.version}</version>
+        </dependency>
+
+        <!-- bpmn-to-code runtime types for the generated Process API -->
+        <dependency>
+            <groupId>io.miragon</groupId>
+            <artifactId>bpmn-to-code-runtime</artifactId>
+            <version>${bpmn-to-code.version}</version>
         </dependency>
 
         <!-- Database -->
@@ -130,6 +138,26 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>3.5.6</version>
+            </plugin>
+            <plugin>
+                <groupId>io.miragon</groupId>
+                <artifactId>bpmn-to-code-maven</artifactId>
+                <version>${bpmn-to-code.version}</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>generate-bpmn-api</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <baseDir>${project.basedir}</baseDir>
+                    <filePattern>src/main/resources/bpmn/*.bpmn</filePattern>
+                    <outputFolderPath>${project.basedir}/src/main/java</outputFolderPath>
+                    <packagePath>io.miragon.example.adapter.process.generated</packagePath>
+                    <outputLanguage>JAVA</outputLanguage>
+                    <processEngine>ZEEBE</processEngine>
+                </configuration>
             </plugin>
         </plugins>
     </build>

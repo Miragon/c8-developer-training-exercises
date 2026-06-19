@@ -2,7 +2,7 @@ package io.miragon.example.adapter.inbound.zeebe.newsletter;
 
 import io.camunda.client.annotation.JobWorker;
 import io.camunda.client.annotation.Variable;
-import io.miragon.example.adapter.process.generated.NewsletterSubscriptionProcessApi.TaskTypes;
+import io.miragon.example.adapter.process.generated.NewsletterSubscriptionProcessApi.ServiceTasks;
 import io.miragon.example.application.port.inbound.newsletter.AbortSubscriptionUseCase;
 import io.miragon.example.domain.SubscriptionId;
 import org.slf4j.Logger;
@@ -22,7 +22,7 @@ public class AbortRegistrationWorker {
 		this.useCase = useCase;
 	}
 	
-	@JobWorker(type = TaskTypes.NEWSLETTER_ABORT_REGISTRATION)
+	@JobWorker(type = ServiceTasks.NEWSLETTER_ABORT_REGISTRATION)
 	public void handle(@Variable String subscriptionId) {
 		log.debug("Received job to abort registration for subscriptionId: {}", subscriptionId);
 		useCase.abort(new SubscriptionId(UUID.fromString(subscriptionId)));

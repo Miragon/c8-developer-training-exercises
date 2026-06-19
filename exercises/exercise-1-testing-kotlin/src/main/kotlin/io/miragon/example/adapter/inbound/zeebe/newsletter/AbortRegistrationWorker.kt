@@ -1,6 +1,6 @@
 package io.miragon.example.adapter.inbound.zeebe.newsletter
 
-import io.miragon.example.adapter.process.generated.NewsletterSubscriptionProcessApi.TaskTypes
+import io.miragon.example.adapter.process.generated.NewsletterSubscriptionProcessApi.ServiceTasks
 import io.miragon.example.application.port.inbound.newsletter.AbortSubscriptionUseCase
 import io.miragon.example.domain.SubscriptionId
 import io.camunda.client.annotation.JobWorker
@@ -16,7 +16,7 @@ class AbortRegistrationWorker(
 
     private val log = KotlinLogging.logger {}
 
-    @JobWorker(type = TaskTypes.ACTIVITY_ABORT_REGISTRATION)
+    @JobWorker(type = ServiceTasks.NEWSLETTER_ABORT_REGISTRATION)
     fun handle(@Variable subscriptionId: String) {
         log.debug { "Received job to abort registration for subscriptionId: $subscriptionId" }
         useCase.abort(SubscriptionId(UUID.fromString(subscriptionId)))

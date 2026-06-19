@@ -22,7 +22,7 @@ public class SendRejectionMailWorker {
         this.useCase = useCase;
     }
 
-    @JobWorker(type = BikeSubscriptionSignupProcessApi.TaskTypes.BIKE_SEND_REJECTION_MAIL)
+    @JobWorker(type = BikeSubscriptionSignupProcessApi.ServiceTasks.BIKE_SEND_REJECTION_MAIL)
     public void handle(@Variable String subscriptionId) {
         log.info("Sending rejection mail for subscription: {}", subscriptionId);
         useCase.sendRejectionMail(new BikeSubscriptionId(UUID.fromString(subscriptionId)));

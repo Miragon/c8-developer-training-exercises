@@ -15,7 +15,7 @@ class NotifyBikeCancelationWorker(
 ) {
     private val log = KotlinLogging.logger {}
 
-    @JobWorker(type = BikeSubscriptionSignupProcessApi.TaskTypes.ACTIVITY_NOTIFY_ABOUT_CANCELATION)
+    @JobWorker(type = BikeSubscriptionSignupProcessApi.ServiceTasks.BIKE_NOTIFY_CANCELATION)
     fun handle(@Variable subscriptionId: String) {
         log.info { "Notifying about cancelation for subscription: $subscriptionId" }
         useCase.notifyCancelation(BikeSubscriptionId(UUID.fromString(subscriptionId)))

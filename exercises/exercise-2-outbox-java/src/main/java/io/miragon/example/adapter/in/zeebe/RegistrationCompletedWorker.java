@@ -1,6 +1,6 @@
 package io.miragon.example.adapter.in.zeebe;
 
-import io.miragon.example.adapter.process.generated.NewsletterSubscriptionProcessApi.TaskTypes;
+import io.miragon.example.adapter.process.generated.NewsletterSubscriptionProcessApi.ServiceTasks;
 import io.miragon.example.application.port.in.IncrementSubscriptionCounterUseCase;
 import io.miragon.example.domain.OperationId;
 import io.miragon.example.domain.SubscriptionId;
@@ -24,7 +24,7 @@ public class RegistrationCompletedWorker {
         this.useCase = useCase;
     }
 
-    @JobWorker(type = TaskTypes.NEWSLETTER_REGISTRATION_COMPLETED)
+    @JobWorker(type = ServiceTasks.NEWSLETTER_REGISTRATION_COMPLETED)
     public void handleRegistrationCompleted(
             ActivatedJob job,
             @Variable("subscriptionId") String subscriptionId

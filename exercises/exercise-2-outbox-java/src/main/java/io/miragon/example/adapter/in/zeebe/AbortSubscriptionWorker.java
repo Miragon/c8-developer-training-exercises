@@ -1,6 +1,6 @@
 package io.miragon.example.adapter.in.zeebe;
 
-import io.miragon.example.adapter.process.generated.NewsletterSubscriptionProcessApi.TaskTypes;
+import io.miragon.example.adapter.process.generated.NewsletterSubscriptionProcessApi.ServiceTasks;
 import io.miragon.example.application.port.in.AbortSubscriptionUseCase;
 import io.miragon.example.domain.OperationId;
 import io.miragon.example.domain.SubscriptionId;
@@ -24,7 +24,7 @@ public class AbortSubscriptionWorker {
         this.useCase = useCase;
     }
 
-    @JobWorker(type = TaskTypes.NEWSLETTER_ABORT_REGISTRATION)
+    @JobWorker(type = ServiceTasks.NEWSLETTER_ABORT_REGISTRATION)
     public void abortRegistration(
             ActivatedJob job,
             @Variable("subscriptionId") String subscriptionId
