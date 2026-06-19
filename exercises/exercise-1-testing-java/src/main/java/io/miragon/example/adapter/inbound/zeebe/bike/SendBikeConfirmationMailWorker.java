@@ -22,7 +22,7 @@ public class SendBikeConfirmationMailWorker {
         this.useCase = useCase;
     }
 
-    @JobWorker(type = BikeSubscriptionSignupProcessApi.TaskTypes.BIKE_SEND_CONFIRMATION_MAIL)
+    @JobWorker(type = BikeSubscriptionSignupProcessApi.ServiceTasks.BIKE_SEND_CONFIRMATION_MAIL)
     public void handle(@Variable String subscriptionId) {
         log.info("Sending bike confirmation mail for subscription: {}", subscriptionId);
         useCase.sendConfirmationMail(new BikeSubscriptionId(UUID.fromString(subscriptionId)));

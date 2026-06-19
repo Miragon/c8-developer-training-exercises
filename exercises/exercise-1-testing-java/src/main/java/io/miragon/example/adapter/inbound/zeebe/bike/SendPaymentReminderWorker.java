@@ -22,7 +22,7 @@ public class SendPaymentReminderWorker {
         this.useCase = useCase;
     }
 
-    @JobWorker(type = BikeSubscriptionSignupProcessApi.TaskTypes.BIKE_SEND_PAYMENT_REMINDER)
+    @JobWorker(type = BikeSubscriptionSignupProcessApi.ServiceTasks.BIKE_SEND_PAYMENT_REMINDER)
     public void handle(@Variable String subscriptionId) {
         log.info("Sending payment reminder for subscription: {}", subscriptionId);
         useCase.sendPaymentReminder(new BikeSubscriptionId(UUID.fromString(subscriptionId)));

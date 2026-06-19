@@ -22,7 +22,7 @@ public class SendBikeWelcomeMailWorker {
         this.useCase = useCase;
     }
 
-    @JobWorker(type = BikeSubscriptionSignupProcessApi.TaskTypes.BIKE_SEND_WELCOME_MAIL)
+    @JobWorker(type = BikeSubscriptionSignupProcessApi.ServiceTasks.BIKE_SEND_WELCOME_MAIL)
     public void handle(@Variable String subscriptionId) {
         log.info("Sending welcome mail for subscription: {}", subscriptionId);
         useCase.sendWelcomeMail(new BikeSubscriptionId(UUID.fromString(subscriptionId)));

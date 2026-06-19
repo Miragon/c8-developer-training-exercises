@@ -2,7 +2,7 @@ package io.miragon.example.adapter.inbound.zeebe.newsletter;
 
 import io.camunda.client.annotation.JobWorker;
 import io.camunda.client.annotation.Variable;
-import io.miragon.example.adapter.process.generated.NewsletterSubscriptionProcessApi.TaskTypes;
+import io.miragon.example.adapter.process.generated.NewsletterSubscriptionProcessApi.ServiceTasks;
 import io.miragon.example.application.port.inbound.newsletter.SendConfirmationMailUseCase;
 import io.miragon.example.domain.SubscriptionId;
 import org.slf4j.Logger;
@@ -22,7 +22,7 @@ public class SendConfirmationMailWorker {
 		this.useCase = useCase;
 	}
 	
-	@JobWorker(type = TaskTypes.NEWSLETTER_SEND_CONFIRMATION_MAIL)
+	@JobWorker(type = ServiceTasks.NEWSLETTER_SEND_CONFIRMATION_MAIL)
 	public void handle(@Variable String subscriptionId) {
 		log.debug("Received job to send confirmation mail for subscriptionId: {}", subscriptionId);
 		useCase.sendConfirmationMail(new SubscriptionId(UUID.fromString(subscriptionId)));

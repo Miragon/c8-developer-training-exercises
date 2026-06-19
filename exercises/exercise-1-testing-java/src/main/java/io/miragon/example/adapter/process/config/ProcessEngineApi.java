@@ -2,6 +2,8 @@ package io.miragon.example.adapter.process.config;
 
 import io.camunda.client.CamundaClient;
 import io.camunda.client.api.search.response.ProcessInstance;
+import io.miragon.bpmn.runtime.MessageName;
+import io.miragon.bpmn.runtime.ProcessId;
 
 import java.time.Duration;
 import java.time.temporal.ChronoUnit;
@@ -24,11 +26,11 @@ public class ProcessEngineApi {
 	 * @return the key of the process instance
 	 */
 	public long startProcess(
-			String processId,
+			ProcessId processId,
 			Map<String, Object> variables
 	) {
 		return camundaClient.newCreateInstanceCommand()
-				.bpmnProcessId(processId)
+				.bpmnProcessId(processId.getValue())
 				.latestVersion()
 				.variables(variables)
 				.send()
@@ -44,12 +46,12 @@ public class ProcessEngineApi {
 	 * @param variables     the variables that should be passed to the process
 	 */
 	public void sendMessage(
-			String messageName,
+			MessageName messageName,
 			String correlationId,
 			Map<String, Object> variables
 	) {
 		camundaClient.newPublishMessageCommand()
-				.messageName(messageName)
+				.messageName(messageName.getValue())
 				.correlationKey(correlationId)
 				.variables(variables)
 				.timeToLive(Duration.of(10, ChronoUnit.SECONDS))
@@ -57,7 +59,7 @@ public class ProcessEngineApi {
 				.join();
 	}
 	
-	public void sendMessage(String messageName, String correlationId) {
+	public void sendMessage(MessageName messageName, String correlationId) {
 		sendMessage(messageName, correlationId, Map.of());
 	}
 	

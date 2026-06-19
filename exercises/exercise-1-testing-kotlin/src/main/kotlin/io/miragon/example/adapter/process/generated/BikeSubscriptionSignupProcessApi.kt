@@ -3,82 +3,391 @@
 
 package io.miragon.example.adapter.process.generated
 
+import io.miragon.bpmn.runtime.BpmnEngine
+import io.miragon.bpmn.runtime.BpmnFlow
+import io.miragon.bpmn.runtime.BpmnRelations
+import io.miragon.bpmn.runtime.BpmnTimer
+import io.miragon.bpmn.runtime.ElementId
+import io.miragon.bpmn.runtime.MessageName
+import io.miragon.bpmn.runtime.ProcessId
+import io.miragon.bpmn.runtime.VariableName
 import kotlin.String
 import kotlin.Suppress
 
 object BikeSubscriptionSignupProcessApi {
-  const val PROCESS_ID: String = "bike-subscription-signup"
+  val PROCESS_ID: ProcessId = ProcessId("bike-subscription-signup")
 
+  val PROCESS_ENGINE: BpmnEngine = BpmnEngine.ZEEBE
+
+  /**
+   * BPMN element ids as declared in the source model.
+   * Typically used in process-level tests or when searching for tasks.
+   * Worker runtime code rarely needs these.
+   */
   object Elements {
-    const val TIMER_EVERY_3_DAYS: String = "Timer_Every3Days"
+    val ACTIVITY_CHECK_AVAILABILITY: ElementId = ElementId("Activity_CheckAvailability")
 
-    const val MESSAGE_REQUEST_CANCELED_EVENT: String = "Message_RequestCanceledEvent"
+    val ACTIVITY_NOTIFY_ABOUT_CANCELATION: ElementId =
+        ElementId("Activity_NotifyAboutCancelation")
 
-    const val ACTIVITY_WAIT_FOR_PAYMENT: String = "Activity_WaitForPayment"
+    val ACTIVITY_SEND_CONFIRMATION_MAIL: ElementId =
+        ElementId("Activity_SendConfirmationMail")
 
-    const val ACTIVITY_WAIT_FOR_DELIVERY: String = "Activity_WaitForDelivery"
+    val ACTIVITY_SEND_PAYMENT_REMINDER: ElementId = ElementId("Activity_SendPaymentReminder")
 
-    const val GATEWAY_BIKE_AVAILABLE: String = "Gateway_BikeAvailable"
+    val ACTIVITY_SEND_REJECTION_MAIL: ElementId = ElementId("Activity_SendRejectionMail")
 
-    const val END_EVENT_OFFER_NOT_POSSIBLE: String = "EndEvent_OfferNotPossible"
+    val ACTIVITY_SEND_WELCOME_MAIL: ElementId = ElementId("Activity_SendWelcomeMail")
 
-    const val END_EVENT_CUSTOMER_REMINDED: String = "EndEvent_CustomerReminded"
+    val ACTIVITY_SHIP_BIKE: ElementId = ElementId("Activity_ShipBike")
 
-    const val END_EVENT_REQUEST_CANCELED: String = "EndEvent_RequestCanceled"
+    val ACTIVITY_WAIT_FOR_DELIVERY: ElementId = ElementId("Activity_WaitForDelivery")
 
-    const val END_EVENT_SUBSCRIPTION_ACTIVE: String = "EndEvent_SubscriptionActive"
+    val ACTIVITY_WAIT_FOR_PAYMENT: ElementId = ElementId("Activity_WaitForPayment")
 
-    const val ACTIVITY_CHECK_AVAILABILITY: String = "Activity_CheckAvailability"
+    val END_EVENT_CUSTOMER_REMINDED: ElementId = ElementId("EndEvent_CustomerReminded")
 
-    const val ACTIVITY_SEND_REJECTION_MAIL: String = "Activity_SendRejectionMail"
+    val END_EVENT_OFFER_NOT_POSSIBLE: ElementId = ElementId("EndEvent_OfferNotPossible")
 
-    const val ACTIVITY_SEND_CONFIRMATION_MAIL: String = "Activity_SendConfirmationMail"
+    val END_EVENT_REQUEST_CANCELED: ElementId = ElementId("EndEvent_RequestCanceled")
 
-    const val ACTIVITY_SEND_PAYMENT_REMINDER: String = "Activity_SendPaymentReminder"
+    val END_EVENT_SUBSCRIPTION_ACTIVE: ElementId = ElementId("EndEvent_SubscriptionActive")
 
-    const val ACTIVITY_NOTIFY_ABOUT_CANCELATION: String = "Activity_NotifyAboutCancelation"
+    val GATEWAY_BIKE_AVAILABLE: ElementId = ElementId("Gateway_BikeAvailable")
 
-    const val ACTIVITY_SHIP_BIKE: String = "Activity_ShipBike"
+    val MESSAGE_REQUEST_CANCELED_EVENT: ElementId = ElementId("Message_RequestCanceledEvent")
 
-    const val ACTIVITY_SEND_WELCOME_MAIL: String = "Activity_SendWelcomeMail"
+    val START_EVENT_SUBSCRIPTION_REQUESTED: ElementId =
+        ElementId("StartEvent_SubscriptionRequested")
 
-    const val START_EVENT_SUBSCRIPTION_REQUESTED: String = "StartEvent_SubscriptionRequested"
+    val TIMER_EVERY_3_DAYS: ElementId = ElementId("Timer_Every3Days")
   }
 
+  /**
+   * BPMN message names used to correlate messages to running process instances.
+   */
   object Messages {
-    const val MESSAGE_PAYMENT_RECEIVED: String = "Message_PaymentReceived"
+    val MESSAGE_BIKE_RECEIVED: MessageName = MessageName("Message_BikeReceived")
 
-    const val MESSAGE_REQUEST_CANCELED: String = "Message_RequestCanceled"
+    val MESSAGE_PAYMENT_RECEIVED: MessageName = MessageName("Message_PaymentReceived")
 
-    const val MESSAGE_BIKE_RECEIVED: String = "Message_BikeReceived"
+    val MESSAGE_REQUEST_CANCELED: MessageName = MessageName("Message_RequestCanceled")
   }
 
-  object TaskTypes {
-    const val ACTIVITY_CHECK_AVAILABILITY: String = "bike.checkAvailability"
+  /**
+   * Job worker task types used in `@JobWorker(type = ServiceTasks.X)` annotations.
+   * Kept as `const val String` because annotation arguments must be compile-time constants.
+   */
+  object ServiceTasks {
+    const val BIKE_CHECK_AVAILABILITY: String = "bike.checkAvailability"
 
-    const val ACTIVITY_SEND_REJECTION_MAIL: String = "bike.sendRejectionMail"
+    const val BIKE_NOTIFY_CANCELATION: String = "bike.notifyCancelation"
 
-    const val ACTIVITY_SEND_CONFIRMATION_MAIL: String = "bike.sendConfirmationMail"
+    const val BIKE_SEND_CONFIRMATION_MAIL: String = "bike.sendConfirmationMail"
 
-    const val ACTIVITY_SEND_PAYMENT_REMINDER: String = "bike.sendPaymentReminder"
+    const val BIKE_SEND_PAYMENT_REMINDER: String = "bike.sendPaymentReminder"
 
-    const val ACTIVITY_NOTIFY_ABOUT_CANCELATION: String = "bike.notifyCancelation"
+    const val BIKE_SEND_REJECTION_MAIL: String = "bike.sendRejectionMail"
 
-    const val ACTIVITY_SHIP_BIKE: String = "bike.shipBike"
+    const val BIKE_SEND_WELCOME_MAIL: String = "bike.sendWelcomeMail"
 
-    const val ACTIVITY_SEND_WELCOME_MAIL: String = "bike.sendWelcomeMail"
+    const val BIKE_SHIP_BIKE: String = "bike.shipBike"
   }
 
   object Timers {
     val TIMER_EVERY_3_DAYS: BpmnTimer = BpmnTimer("Duration", "PT72H")
-
-    data class BpmnTimer(
-      val type: String,
-      val timerValue: String,
-    )
   }
 
+  /**
+   * Process variables grouped by the BPMN element that declares them.
+   * Direction is encoded in each variable's wrapper type: `VariableName.Input`, `VariableName.Output`, or `VariableName.InOut` when the variable is both read and written by the same element.
+   * Consumer APIs that take a specific subtype (e.g. `fun setOutput(v: VariableName.Output)`) get compile-time direction enforcement.
+   */
   object Variables {
-    const val SUBSCRIPTION_ID: String = "subscriptionId"
+    object ActivityCheckAvailability {
+      val SUBSCRIPTION_ID: VariableName.Input = VariableName.Input("subscriptionId")
+    }
+
+    object ActivityNotifyAboutCancelation {
+      val SUBSCRIPTION_ID: VariableName.Input = VariableName.Input("subscriptionId")
+    }
+
+    object ActivitySendConfirmationMail {
+      val SUBSCRIPTION_ID: VariableName.Input = VariableName.Input("subscriptionId")
+    }
+
+    object ActivitySendPaymentReminder {
+      val SUBSCRIPTION_ID: VariableName.Input = VariableName.Input("subscriptionId")
+    }
+
+    object ActivitySendRejectionMail {
+      val SUBSCRIPTION_ID: VariableName.Input = VariableName.Input("subscriptionId")
+    }
+
+    object ActivitySendWelcomeMail {
+      val SUBSCRIPTION_ID: VariableName.Input = VariableName.Input("subscriptionId")
+    }
+
+    object ActivityShipBike {
+      val SUBSCRIPTION_ID: VariableName.Input = VariableName.Input("subscriptionId")
+    }
+
+    object StartEventSubscriptionRequested {
+      val SUBSCRIPTION_ID: VariableName.Output = VariableName.Output("subscriptionId")
+    }
+  }
+
+  /**
+   * Sequence flows between BPMN elements.
+   * Mainly useful for process-model tooling, tests, and AI-agent consumers reasoning about the process shape.
+   * Worker code typically does not need these.
+   */
+  object Flows {
+    val FLOW_BIKE_AVAILABLE: BpmnFlow = BpmnFlow(
+          id = "Flow_BikeAvailable",
+          name = "Yes",
+          sourceRef = "Gateway_BikeAvailable",
+          targetRef = "Activity_SendConfirmationMail",
+          condition = "=bikeAvailable = true",
+        )
+
+    val FLOW_BIKE_NOT_AVAILABLE: BpmnFlow = BpmnFlow(
+          id = "Flow_BikeNotAvailable",
+          name = "No",
+          sourceRef = "Gateway_BikeAvailable",
+          targetRef = "Activity_SendRejectionMail",
+          condition = "=bikeAvailable = false",
+        )
+
+    val FLOW_BIKE_RECEIVED: BpmnFlow = BpmnFlow(
+          id = "Flow_BikeReceived",
+          sourceRef = "Activity_WaitForDelivery",
+          targetRef = "Activity_SendWelcomeMail",
+        )
+
+    val FLOW_PAYMENT_RECEIVED: BpmnFlow = BpmnFlow(
+          id = "Flow_PaymentReceived",
+          sourceRef = "Activity_WaitForPayment",
+          targetRef = "Activity_ShipBike",
+        )
+
+    val FLOW_REMINDER_SENT: BpmnFlow = BpmnFlow(
+          id = "Flow_ReminderSent",
+          sourceRef = "Activity_SendPaymentReminder",
+          targetRef = "EndEvent_CustomerReminded",
+        )
+
+    val FLOW_TO_CANCEL_NOTIFICATION: BpmnFlow = BpmnFlow(
+          id = "Flow_ToCancelNotification",
+          sourceRef = "Message_RequestCanceledEvent",
+          targetRef = "Activity_NotifyAboutCancelation",
+        )
+
+    val FLOW_TO_CANCELED_END: BpmnFlow = BpmnFlow(
+          id = "Flow_ToCanceledEnd",
+          sourceRef = "Activity_NotifyAboutCancelation",
+          targetRef = "EndEvent_RequestCanceled",
+        )
+
+    val FLOW_TO_CHECK_AVAILABILITY: BpmnFlow = BpmnFlow(
+          id = "Flow_ToCheckAvailability",
+          sourceRef = "StartEvent_SubscriptionRequested",
+          targetRef = "Activity_CheckAvailability",
+        )
+
+    val FLOW_TO_END_NOT_AVAILABLE: BpmnFlow = BpmnFlow(
+          id = "Flow_ToEndNotAvailable",
+          sourceRef = "Activity_SendRejectionMail",
+          targetRef = "EndEvent_OfferNotPossible",
+        )
+
+    val FLOW_TO_END_SUCCESS: BpmnFlow = BpmnFlow(
+          id = "Flow_ToEndSuccess",
+          sourceRef = "Activity_SendWelcomeMail",
+          targetRef = "EndEvent_SubscriptionActive",
+        )
+
+    val FLOW_TO_GATEWAY_AVAILABLE: BpmnFlow = BpmnFlow(
+          id = "Flow_ToGatewayAvailable",
+          sourceRef = "Activity_CheckAvailability",
+          targetRef = "Gateway_BikeAvailable",
+        )
+
+    val FLOW_TO_SEND_REMINDER: BpmnFlow = BpmnFlow(
+          id = "Flow_ToSendReminder",
+          sourceRef = "Timer_Every3Days",
+          targetRef = "Activity_SendPaymentReminder",
+        )
+
+    val FLOW_TO_WAIT_FOR_DELIVERY: BpmnFlow = BpmnFlow(
+          id = "Flow_ToWaitForDelivery",
+          sourceRef = "Activity_ShipBike",
+          targetRef = "Activity_WaitForDelivery",
+        )
+
+    val FLOW_TO_WAIT_FOR_PAYMENT: BpmnFlow = BpmnFlow(
+          id = "Flow_ToWaitForPayment",
+          sourceRef = "Activity_SendConfirmationMail",
+          targetRef = "Activity_WaitForPayment",
+        )
+  }
+
+  /**
+   * Per-element graph metadata (previousElements / followingElements / parentId / boundary attachments).
+   * Intended for tooling and tests, not worker runtime code.
+   */
+  object Relations {
+    val ACTIVITY_CHECK_AVAILABILITY: BpmnRelations = BpmnRelations(
+          name = "Check bike availability",
+          previousElements = listOf("StartEvent_SubscriptionRequested"),
+          followingElements = listOf("Gateway_BikeAvailable"),
+          parentId = null,
+          attachedToRef = null,
+          attachedElements = emptyList(),
+        )
+
+    val ACTIVITY_NOTIFY_ABOUT_CANCELATION: BpmnRelations = BpmnRelations(
+          name = "Notify about cancelation",
+          previousElements = listOf("Message_RequestCanceledEvent"),
+          followingElements = listOf("EndEvent_RequestCanceled"),
+          parentId = null,
+          attachedToRef = null,
+          attachedElements = emptyList(),
+        )
+
+    val ACTIVITY_SEND_CONFIRMATION_MAIL: BpmnRelations = BpmnRelations(
+          name = "Send confirmation mail",
+          previousElements = listOf("Gateway_BikeAvailable"),
+          followingElements = listOf("Activity_WaitForPayment"),
+          parentId = null,
+          attachedToRef = null,
+          attachedElements = emptyList(),
+        )
+
+    val ACTIVITY_SEND_PAYMENT_REMINDER: BpmnRelations = BpmnRelations(
+          name = "Remind about payment",
+          previousElements = listOf("Timer_Every3Days"),
+          followingElements = listOf("EndEvent_CustomerReminded"),
+          parentId = null,
+          attachedToRef = null,
+          attachedElements = emptyList(),
+        )
+
+    val ACTIVITY_SEND_REJECTION_MAIL: BpmnRelations = BpmnRelations(
+          name = "Send rejection mail",
+          previousElements = listOf("Gateway_BikeAvailable"),
+          followingElements = listOf("EndEvent_OfferNotPossible"),
+          parentId = null,
+          attachedToRef = null,
+          attachedElements = emptyList(),
+        )
+
+    val ACTIVITY_SEND_WELCOME_MAIL: BpmnRelations = BpmnRelations(
+          name = "Send welcome Mail",
+          previousElements = listOf("Activity_WaitForDelivery"),
+          followingElements = listOf("EndEvent_SubscriptionActive"),
+          parentId = null,
+          attachedToRef = null,
+          attachedElements = emptyList(),
+        )
+
+    val ACTIVITY_SHIP_BIKE: BpmnRelations = BpmnRelations(
+          name = "Ship bike",
+          previousElements = listOf("Activity_WaitForPayment"),
+          followingElements = listOf("Activity_WaitForDelivery"),
+          parentId = null,
+          attachedToRef = null,
+          attachedElements = emptyList(),
+        )
+
+    val ACTIVITY_WAIT_FOR_DELIVERY: BpmnRelations = BpmnRelations(
+          name = "Bike received",
+          previousElements = listOf("Activity_ShipBike"),
+          followingElements = listOf("Activity_SendWelcomeMail"),
+          parentId = null,
+          attachedToRef = null,
+          attachedElements = emptyList(),
+        )
+
+    val ACTIVITY_WAIT_FOR_PAYMENT: BpmnRelations = BpmnRelations(
+          name = "Wait for first payment",
+          previousElements = listOf("Activity_SendConfirmationMail"),
+          followingElements = listOf("Activity_ShipBike"),
+          parentId = null,
+          attachedToRef = null,
+          attachedElements = listOf("Timer_Every3Days", "Message_RequestCanceledEvent"),
+        )
+
+    val END_EVENT_CUSTOMER_REMINDED: BpmnRelations = BpmnRelations(
+          name = "Customer reminded",
+          previousElements = listOf("Activity_SendPaymentReminder"),
+          followingElements = emptyList(),
+          parentId = null,
+          attachedToRef = null,
+          attachedElements = emptyList(),
+        )
+
+    val END_EVENT_OFFER_NOT_POSSIBLE: BpmnRelations = BpmnRelations(
+          name = "Offer not possible",
+          previousElements = listOf("Activity_SendRejectionMail"),
+          followingElements = emptyList(),
+          parentId = null,
+          attachedToRef = null,
+          attachedElements = emptyList(),
+        )
+
+    val END_EVENT_REQUEST_CANCELED: BpmnRelations = BpmnRelations(
+          name = "Subscription request canceled",
+          previousElements = listOf("Activity_NotifyAboutCancelation"),
+          followingElements = emptyList(),
+          parentId = null,
+          attachedToRef = null,
+          attachedElements = emptyList(),
+        )
+
+    val END_EVENT_SUBSCRIPTION_ACTIVE: BpmnRelations = BpmnRelations(
+          name = "Subscription active",
+          previousElements = listOf("Activity_SendWelcomeMail"),
+          followingElements = emptyList(),
+          parentId = null,
+          attachedToRef = null,
+          attachedElements = emptyList(),
+        )
+
+    val GATEWAY_BIKE_AVAILABLE: BpmnRelations = BpmnRelations(
+          name = "Available?",
+          previousElements = listOf("Activity_CheckAvailability"),
+          followingElements = listOf("Activity_SendConfirmationMail", "Activity_SendRejectionMail"),
+          parentId = null,
+          attachedToRef = null,
+          attachedElements = emptyList(),
+        )
+
+    val MESSAGE_REQUEST_CANCELED_EVENT: BpmnRelations = BpmnRelations(
+          name = "Request canceled",
+          previousElements = emptyList(),
+          followingElements = listOf("Activity_NotifyAboutCancelation"),
+          parentId = null,
+          attachedToRef = "Activity_WaitForPayment",
+          attachedElements = emptyList(),
+        )
+
+    val START_EVENT_SUBSCRIPTION_REQUESTED: BpmnRelations = BpmnRelations(
+          name = "Subscription requested",
+          previousElements = emptyList(),
+          followingElements = listOf("Activity_CheckAvailability"),
+          parentId = null,
+          attachedToRef = null,
+          attachedElements = emptyList(),
+        )
+
+    val TIMER_EVERY_3_DAYS: BpmnRelations = BpmnRelations(
+          name = "Every 3 days",
+          previousElements = emptyList(),
+          followingElements = listOf("Activity_SendPaymentReminder"),
+          parentId = null,
+          attachedToRef = "Activity_WaitForPayment",
+          attachedElements = emptyList(),
+        )
   }
 }

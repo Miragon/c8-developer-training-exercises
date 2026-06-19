@@ -15,7 +15,7 @@ class SendBikeWelcomeMailWorker(
 ) {
     private val log = KotlinLogging.logger {}
 
-    @JobWorker(type = BikeSubscriptionSignupProcessApi.TaskTypes.ACTIVITY_SEND_WELCOME_MAIL)
+    @JobWorker(type = BikeSubscriptionSignupProcessApi.ServiceTasks.BIKE_SEND_WELCOME_MAIL)
     fun handle(@Variable subscriptionId: String) {
         log.info { "Sending welcome mail for subscription: $subscriptionId" }
         useCase.sendWelcomeMail(BikeSubscriptionId(UUID.fromString(subscriptionId)))

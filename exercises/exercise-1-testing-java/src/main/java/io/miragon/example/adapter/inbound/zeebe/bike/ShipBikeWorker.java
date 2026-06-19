@@ -22,7 +22,7 @@ public class ShipBikeWorker {
         this.useCase = useCase;
     }
 
-    @JobWorker(type = BikeSubscriptionSignupProcessApi.TaskTypes.BIKE_SHIP_BIKE)
+    @JobWorker(type = BikeSubscriptionSignupProcessApi.ServiceTasks.BIKE_SHIP_BIKE)
     public void handle(@Variable String subscriptionId) {
         log.info("Shipping bike for subscription: {}", subscriptionId);
         useCase.shipBike(new BikeSubscriptionId(UUID.fromString(subscriptionId)));

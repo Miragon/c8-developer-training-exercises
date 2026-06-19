@@ -15,7 +15,7 @@ class SendPaymentReminderWorker(
 ) {
     private val log = KotlinLogging.logger {}
 
-    @JobWorker(type = BikeSubscriptionSignupProcessApi.TaskTypes.ACTIVITY_SEND_PAYMENT_REMINDER)
+    @JobWorker(type = BikeSubscriptionSignupProcessApi.ServiceTasks.BIKE_SEND_PAYMENT_REMINDER)
     fun handle(@Variable subscriptionId: String) {
         log.info { "Sending payment reminder for subscription: $subscriptionId" }
         useCase.sendPaymentReminder(BikeSubscriptionId(UUID.fromString(subscriptionId)))

@@ -15,7 +15,7 @@ class CheckBikeAvailabilityWorker(
 ) {
     private val log = KotlinLogging.logger {}
 
-    @JobWorker(type = BikeSubscriptionSignupProcessApi.TaskTypes.ACTIVITY_CHECK_AVAILABILITY)
+    @JobWorker(type = BikeSubscriptionSignupProcessApi.ServiceTasks.BIKE_CHECK_AVAILABILITY)
     fun handle(@Variable subscriptionId: String): Map<String, Any> {
         log.info { "Checking bike availability for subscription: $subscriptionId" }
         val available = useCase.checkAvailability(BikeSubscriptionId(UUID.fromString(subscriptionId)))
