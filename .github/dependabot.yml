@@ -1,35 +1,46 @@
 version: 2
-updates:
 
-  # Config for backend-dependencies
-  - package-ecosystem: "maven"
-    directory: "/"
-    schedule:
-      interval: "monthly"
-    groups:
-      backend-dependencies:
-        patterns:
-          - "*"
-        update-types:
-          - "patch"
-          - "minor"
-          - "major"
-
-  # Config for Docker Compose dependencies
-  - package-ecosystem: "docker-compose"
-    directories:
-      - "/stack"
+# Backend stack: Maven code deps and the docker-compose images the exercises
+# run on move together in a single monthly PR (Camunda engine + client,
+# Postgres image + JDBC driver stay in lockstep).
+multi-ecosystem-groups:
+  backend:
     schedule:
       interval: "monthly"
     labels:
       - "dependencies"
-    assignees:
-      - "emaarco"
+
+updates:
+
+  # Backend stack member: Maven (multi-module, root aggregates the exercises)
+  - package-ecosystem: "maven"
+    directory: "/"
+    patterns:
+      - "*"
+    multi-ecosystem-group: "backend"
+
+  # Backend stack member: Docker Compose infrastructure
+  - package-ecosystem: "docker-compose"
+    directory: "/stack"
+    patterns:
+      - "*"
+    multi-ecosystem-group: "backend"
+
+  # GitHub Actions: standalone, fully grouped, with cooldown + security group
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "monthly"
+    labels:
+      - "dependencies"
+    cooldown:
+      default-days: 5
     groups:
-      docker-compose:
+      github-actions:
+        applies-to: version-updates
         patterns:
           - "*"
-        update-types:
-          - "patch"
-          - "minor"
-          - "major"
+      github-actions-security:
+        applies-to: security-updates
+        patterns:
+          - "*"
