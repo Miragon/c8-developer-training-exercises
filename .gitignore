@@ -13,3 +13,4 @@
 .kotlin/
 .claude
 target
+.claude/logs/
